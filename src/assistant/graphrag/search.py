@@ -235,6 +235,42 @@ def _direct_local_answer(
         )
     )
 
+    asks_product_line = bool(
+        re.search(
+            r"в\\s+какую\\s+линейк\\w*|к\\s+какой\\s+линейк\\w*",
+            lowered,
+        )
+    )
+
+    if asks_product_line:
+        answers = []
+        selected_edges: set[tuple[str, str]] = set()
+        facts = []
+        model_nodes = {
+            node
+            for node in anchor_nodes
+            if node in graph and graph.nodes[node].get("type") == "Model"
+        }
+        for model_node in sorted(model_nodes):
+            for _, target, data in graph.out_edges(model_node, data=True):
+                if data.get("type") != "BELONGS_TO":
+                    continue
+                selected_edges.add((model_node, target))
+                facts.append(
+                    _format_edge(graph, model_node, target, data)
+                )
+                answers.append(
+                    f"Модель {graph.nodes[model_node].get('name', model_node)} "
+                    f"входит в линейку "
+                    f"«{graph.nodes[target].get('name', target)}»."
+                )
+        if answers:
+            return Answer(
+                text="\\n".join(answers),
+                sources=_edge_sources(graph, selected_edges),
+                facts=list(dict.fromkeys(facts)),
+            )
+
     if not (asks_procedure or asks_indication):
         return None
 
