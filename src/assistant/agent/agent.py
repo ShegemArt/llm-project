@@ -384,10 +384,22 @@ def _extract_stock_values(text: str) -> set[str]:
 
 
 def _tool_result_codes(result: dict) -> set[str]:
-    """Находит коды, появившиеся в любом поле ответа инструмента."""
-    serialized = json.dumps(result, ensure_ascii=False, default=str)
-    return set(find_codes(serialized))
+    """Извлекает подтверждённые коды из фактов графа или структурированных полей ERP."""
+    facts = result.get("facts")
+    if isinstance(facts, list):
+        # Не доверяем свободному тексту ответа, который могла сгенерировать LLM.
+        trusted_text = "\n".join(
+            fact for fact in facts if isinstance(fact, str)
+        )
+        return set(find_codes(trusted_text))
 
+    trusted_fields = {
+        key: result[key]
+        for key in ("part_id", "model")
+        if isinstance(result.get(key), str)
+    }
+    serialized = json.dumps(trusted_fields, ensure_ascii=False, default=str)
+    return set(find_codes(serialized))
 
 def _validate_answer(
     answer: str,
@@ -652,7 +664,9 @@ def _fallback_tool_request(
     )
 
     if re.search(r"снят\w*\s+с\s+производств", lowered) or re.search(
-        r"чаще\s+всего|наиболее\s+част|по\s+статистик", lowered
+        r"чаще\s+всего|наиболее\s+част|больше\s+всего|"
+        r"наибольш\w*|максимальн\w*|по\s+статистик|частот\w*",
+        lowered,
     ):
         if not any(step.tool == "summarize_topic" for step in steps):
             return "summarize_topic", {"question": question}
