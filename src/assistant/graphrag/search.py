@@ -241,6 +241,45 @@ def _direct_local_answer(
             lowered,
         )
     )
+    asks_installed_models = bool(
+        re.search(
+            r"в\s+каких\s+моделях.*(?:установлен\w*|использу\w*|применя\w*)",
+            lowered,
+        )
+    )
+
+    if asks_installed_models:
+        answers = []
+        selected_edges: set[tuple[str, str]] = set()
+        facts = []
+        part_nodes = {
+            node
+            for node in anchor_nodes
+            if node in graph and graph.nodes[node].get("type") == "Part"
+        }
+        for part_node in sorted(part_nodes):
+            for model_node, _, data in graph.in_edges(part_node, data=True):
+                if (
+                    data.get("type") != "HAS_PART"
+                    or graph.nodes[model_node].get("type") != "Model"
+                ):
+                    continue
+                selected_edges.add((model_node, part_node))
+                facts.append(
+                    _format_edge(graph, model_node, part_node, data)
+                )
+                answers.append(
+                    f"Деталь {graph.nodes[part_node].get('name', part_node)} "
+                    f"установлена в модели "
+                    f"{graph.nodes[model_node].get('name', model_node)}."
+                )
+
+        if answers:
+            return Answer(
+                text="\\n".join(sorted(set(answers))),
+                sources=_edge_sources(graph, selected_edges),
+                facts=list(dict.fromkeys(facts)),
+            )
 
     if asks_product_line:
         answers = []
