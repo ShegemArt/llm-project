@@ -1125,7 +1125,13 @@ def run_agent(
                     sources,
                 )
 
-                known_codes.update(_tool_result_codes(fallback_result))
+                known_codes.update(
+                    _tool_result_codes(
+                        fallback_result,
+                        tool_name=fallback_name,
+                        question=question,
+                    )
+                )
                 serialized_result = json.dumps(
                     fallback_result,
                     ensure_ascii=False,
@@ -1165,13 +1171,30 @@ def run_agent(
                             sources=sorted(sources),
                             refused=True,
                         )
-                    if fallback_name == "summarize_topic":
-                        return AgentResult(
-                            answer=str(fallback_result.get("answer", "")),
-                            steps=steps,
-                            sources=sorted(sources),
-                            refused=False,
+                    if fallback_name in {"search_knowledge", "summarize_topic"}:
+                        answer_text = str(fallback_result.get("answer", ""))
+                        requires_erp = (
+                            _asks_stock_question(question)
+                            or _asks_price_question(question)
+                            or _asks_for_order(question)
                         )
+                        violations = _validate_answer(
+                            answer_text,
+                            known_codes=known_codes,
+                            known_prices=known_prices,
+                            known_stocks=known_stocks,
+                        )
+                        if (
+                            not requires_erp
+                            and answer_text
+                            and not _has_unsupported_facts(violations)
+                        ):
+                            return AgentResult(
+                                answer=answer_text,
+                                steps=steps,
+                                sources=sorted(sources),
+                                refused=False,
+                            )
 
                 # Если пользователь просит оформить заказ, не продолжаем
                 # после обнаружения снятой с производства детали.
@@ -1480,15 +1503,32 @@ def run_agent(
                     sources.update(str(source) for source in tool_sources)
                 knowledge_refused = knowledge_refused or bool(result.get("refused"))
 
-                if name == "summarize_topic" and not result.get("refused"):
-                    # summarize_topic уже возвращает готовый ответ global_search.
-                    # Повторная генерация в агенте могла необоснованно его отклонить.
-                    return AgentResult(
-                        answer=str(result.get("answer", "")),
-                        steps=steps,
-                        sources=sorted(sources),
-                        refused=False,
+                if name in {"search_knowledge", "summarize_topic"} and not result.get("refused"):
+                    answer_text = str(result.get("answer", ""))
+                    requires_erp = (
+                        _asks_stock_question(question)
+                        or _asks_price_question(question)
+                        or _asks_for_order(question)
                     )
+                    violations = _validate_answer(
+                        answer_text,
+                        known_codes=known_codes,
+                        known_prices=known_prices,
+                        known_stocks=known_stocks,
+                    )
+                    if (
+                        not requires_erp
+                        and answer_text
+                        and not _has_unsupported_facts(violations)
+                    ):
+                        # Инструмент уже вернул законченный ответ. Не запускаем
+                        # повторную генерацию, если ERP-цепочка не требуется.
+                        return AgentResult(
+                            answer=answer_text,
+                            steps=steps,
+                            sources=sorted(sources),
+                            refused=False,
+                        )
 
                 # Отказ поиска — конечный результат. Повторный поиск не добавит
                 # информации и раньше приводил к исчерпанию лимита шагов.
