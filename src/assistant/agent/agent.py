@@ -1165,6 +1165,13 @@ def run_agent(
                             sources=sorted(sources),
                             refused=True,
                         )
+                    if fallback_name == "summarize_topic":
+                        return AgentResult(
+                            answer=str(fallback_result.get("answer", "")),
+                            steps=steps,
+                            sources=sorted(sources),
+                            refused=False,
+                        )
 
                 # Если пользователь просит оформить заказ, не продолжаем
                 # после обнаружения снятой с производства детали.
@@ -1472,6 +1479,16 @@ def run_agent(
                 if isinstance(tool_sources, list):
                     sources.update(str(source) for source in tool_sources)
                 knowledge_refused = knowledge_refused or bool(result.get("refused"))
+
+                if name == "summarize_topic" and not result.get("refused"):
+                    # summarize_topic уже возвращает готовый ответ global_search.
+                    # Повторная генерация в агенте могла необоснованно его отклонить.
+                    return AgentResult(
+                        answer=str(result.get("answer", "")),
+                        steps=steps,
+                        sources=sorted(sources),
+                        refused=False,
+                    )
 
                 # Отказ поиска — конечный результат. Повторный поиск не добавит
                 # информации и раньше приводил к исчерпанию лимита шагов.
