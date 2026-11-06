@@ -80,8 +80,8 @@ def _asks_price_question(question: str) -> bool:
     """Распознаёт цену, включая формулировку «сколько она стоит»."""
     return bool(
         re.search(
-            r"сколько\\s+(?:(?:она|он|оно|это|эта\\s+деталь|данная\\s+деталь)\\s+)?стоит|"
-            r"стоимост\\w*|цен\\w*|по\\s+какой\\s+цене",
+            r"сколько\s+(?:(?:она|он|оно|это|эта\s+деталь|данная\s+деталь)\s+)?стоит|"
+            r"стоимост\w*|цен\w*|по\s+какой\s+цене",
             question.casefold(),
         )
     )
@@ -91,7 +91,7 @@ def _asks_stock_question(question: str) -> bool:
     """Распознаёт вопросы об остатках и наличии на складах."""
     return bool(
         re.search(
-            r"на\\s+складе|в\\s+наличии|остат\\w*|сколько\\s+штук|есть\\s+ли|где\\s+есть",
+            r"на\s+складе|в\s+наличии|остат\w*|сколько\s+штук|есть\s+ли|где\s+есть",
             question.casefold(),
         )
     )
@@ -108,8 +108,8 @@ def _stock_answer_if_ignored(
     if not _asks_stock_question(question):
         return None
     if not search_requested and not re.search(
-        r"недостаточно\\s+данных|нет\\s+информац|не\\s+могу\\s+определить|"
-        r"невозможно\\s+определить|нельзя\\s+определить|не\\s+указан",
+        r"недостаточно\s+данных|нет\s+информац|не\s+могу\s+определить|"
+        r"невозможно\s+определить|нельзя\s+определить|не\s+указан",
         response_text,
         re.IGNORECASE,
     ):
@@ -491,7 +491,7 @@ def _tool_result_codes(
     """Извлекает коды только из подтверждённых фактов и полей инструментов."""
     facts = result.get("facts")
     if isinstance(facts, list):
-        trusted_text = "\\n".join(
+        trusted_text = "\n".join(
             fact for fact in facts if isinstance(fact, str)
         )
         return set(find_codes(trusted_text))
@@ -507,7 +507,7 @@ def _tool_result_codes(
     # Для вопросов о снятых деталях global_search возвращает детерминированный
     # результат, рассчитанный непосредственно по связям REPLACED_BY.
     asks_discontinued = bool(
-        re.search(r"снят\\w*\\s+с\\s+производств", question, re.IGNORECASE)
+        re.search(r"снят\w*\s+с\s+производств", question, re.IGNORECASE)
     )
     if (
         tool_name == "summarize_topic"
@@ -832,8 +832,8 @@ def _fallback_tool_request(
         )
         or bool(
             re.search(
-                r"ошибк\\w*|регламент\\w*|модел\\w*|узел\\w*|компонент\\w*|"
-                r"детал\\w*|поставщик\\w*|поставля\\w*|в\\s+каких\\s+моделях",
+                r"ошибк\w*|регламент\w*|модел\w*|узел\w*|компонент\w*|"
+                r"детал\w*|поставщик\w*|поставля\w*|в\s+каких\s+моделях",
                 lowered,
             )
         )
@@ -1000,21 +1000,14 @@ def run_agent(
                         )
 
                     if not confirm:
-                        pending_result = {"status": "pending_confirmation"}
-                        steps.append(
-                            ToolStep(
-                                tool=fallback_name,
-                                args=dict(fallback_args),
-                                result=pending_result,
-                            )
-                        )
                         return AgentResult(
                             answer=(
-                            f"Подготовлен заказ на {requested_qty} шт. детали "
-                            f"{args.get('part_id')} для модели {args.get('model')} "
-                            f"на складе {args.get('warehouse')}. "
-                            "Заказ ожидает подтверждения и пока не создан."
-                        ),
+                                f"Подготовлен заказ на {requested_qty} шт. детали "
+                                f"{fallback_args.get('part_id')} для модели "
+                                f"{fallback_args.get('model')} на складе "
+                                f"{fallback_args.get('warehouse')}. "
+                                "Заказ ожидает подтверждения и пока не создан."
+                            ),
                             steps=steps,
                             sources=sorted(sources),
                             needs_confirmation=True,
@@ -1327,17 +1320,12 @@ def run_agent(
                         )
 
                 if not confirm:
-                    pending_result = {"status": "pending_confirmation"}
-                    steps.append(
-                        ToolStep(
-                            tool=name,
-                            args=step_args,
-                            result=pending_result,
-                        )
-                    )
                     return AgentResult(
                         answer=(
-                            "Заказ подготовлен и ожидает подтверждения пользователя."
+                            f"Подготовлен заказ на {requested_qty} шт. детали "
+                            f"{args.get('part_id')} для модели {args.get('model')} "
+                            f"на складе {args.get('warehouse')}. "
+                            "Заказ ожидает подтверждения и пока не создан."
                         ),
                         steps=steps,
                         sources=sorted(sources),
