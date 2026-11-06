@@ -1073,11 +1073,11 @@ def run_agent(
                     if not confirm:
                         return AgentResult(
                             answer=(
-                                f"Подготовлен заказ на {requested_qty} шт. детали "
-                                f"{fallback_args.get('part_id')} для модели "
+                                f"Подготовлен заказ на деталь {fallback_args.get('part_id')} "
+                                f"для модели "
                                 f"{fallback_args.get('model')} на складе "
                                 f"{fallback_args.get('warehouse')}. "
-                                "Заказ ожидает подтверждения и пока не создан."
+                                "Количество соответствует запросу пользователя. Заказ ожидает подтверждения и пока не создан."
                             ),
                             steps=steps,
                             sources=sorted(sources),
@@ -1429,8 +1429,8 @@ def run_agent(
                 if not confirm:
                     return AgentResult(
                         answer=(
-                            f"Подготовлен заказ на {requested_qty} шт. детали "
-                            f"{args.get('part_id')} для модели {args.get('model')} "
+                            f"Подготовлен заказ на деталь {args.get('part_id')} "
+                            f"для модели {args.get('model')} "
                             f"на складе {args.get('warehouse')}. "
                             "Заказ ожидает подтверждения и пока не создан."
                         ),
