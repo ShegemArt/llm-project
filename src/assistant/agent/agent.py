@@ -1350,6 +1350,12 @@ def run_agent(
                 messages.append(tool_message(call, result))
                 continue
 
+            if name == "search_knowledge":
+                # Не даём LLM потерять смысл отношения при переформулировке запроса.
+                # Полный исходный вопрос сохраняет коды, ограничения и тип искомого ответа.
+                args = {**args, "question": question}
+                step_args = dict(args)
+
             part_id = args.get("part_id")
             if part_id is not None:
                 if not isinstance(part_id, str) or not PART_PATTERN.fullmatch(part_id):
