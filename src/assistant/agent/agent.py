@@ -791,11 +791,20 @@ def _fallback_tool_request(
             if _blocked_order_answer(question, steps, part_id, warehouse):
                 return None
             requested = _extract_explicit_quantity(question)
-            if requested is not None and not stock.get("error"):
+            models = [
+                code for code in codes
+                if code_type(code) == "Model"
+            ]
+            if (
+                requested is not None
+                and not stock.get("error")
+                and len(models) == 1
+            ):
                 return "create_service_order", {
                     "part_id": part_id,
                     "warehouse": warehouse,
                     "qty": requested,
+                    "model": models[0],
                 }
 
         if asks_stock and warehouse:
