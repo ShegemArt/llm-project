@@ -225,12 +225,12 @@ def _direct_local_answer(
     graph = kb.graph
     lowered = question.casefold()
     asks_procedure = bool(
-        re.search(r"регламент\\w*|процедур\\w*", lowered)
+        re.search(r"регламент\w*|процедур\w*", lowered)
     )
     asks_indication = bool(
         re.search(
-            r"что\\s+(?:означает|указывает)|на\\s+отказ\\s+какого\\s+узла|"
-            r"какой\\s+узел\\s+(?:отказал|неисправен)",
+            r"что\s+(?:означает|указывает)|на\s+отказ\s+какого\s+узла|"
+            r"какой\s+узел\s+(?:отказал|неисправен)",
             lowered,
         )
     )
@@ -303,7 +303,7 @@ def _direct_local_answer(
         return None
 
     return Answer(
-        text="\\n".join(dict.fromkeys(answers)),
+        text="\n".join(dict.fromkeys(answers)),
         sources=_edge_sources(graph, selected_edges),
         facts=list(dict.fromkeys(facts)),
     )
@@ -315,21 +315,15 @@ def _statistics_answer(
 ) -> Answer | None:
     """Программно отвечает на вопросы о максимальной частоте отказов."""
     lowered = question.casefold()
-    asks_component_max = bool(
-        re.search(
-            r"чаще\\s+всего|наиболее\\s+част|сам\\w*\\s+част\\w*",
-            lowered,
-        )
-    )
     asks_model_max = bool(
         re.search(
-            r"больше\\s+всего\\s+отказ|наибольш\\w*\\s+количеств\\w*\\s+отказ|"
-            r"максимальн\\w*\\s+количеств\\w*\\s+отказ",
+            r"больше\s+всего\s+отказ|наибольш\w*\s+количеств\w*\s+отказ|"
+            r"максимальн\w*\s+количеств\w*\s+отказ",
             lowered,
         )
     )
 
-    if not (asks_component_max or asks_model_max):
+    if not asks_model_max:
         return None
 
     line_names = sorted(
@@ -344,14 +338,8 @@ def _statistics_answer(
 
     graph = kb.graph
     statistics = _global_graph_statistics(graph)
-    if asks_model_max:
-        rows = statistics["failures_by_line_and_model"]
-        label_key = "model"
-        title = "Модель"
-    else:
-        rows = statistics["failures_by_line_and_component"]
-        label_key = "component"
-        title = "Узел"
+    rows = statistics["failures_by_line_and_model"]
+    label_key = "model"
 
     selected_rows = [
         row for row in rows
@@ -383,13 +371,8 @@ def _statistics_answer(
         if len(winner_names) == 1:
             answer_subject = winner_names[0]
             answers.append(
-                f"В линейке «{line_name}» чаще всего отказывает "
-                f"{answer_subject}: {maximum} отказов."
-                if not asks_model_max
-                else (
-                    f"В линейке «{line_name}» наибольшее количество отказов "
-                    f"у модели {answer_subject}: {maximum}."
-                )
+                f"В линейке «{line_name}» наибольшее количество отказов "
+                f"у модели {answer_subject}: {maximum}."
             )
         else:
             joined = ", ".join(winner_names)
@@ -404,7 +387,7 @@ def _statistics_answer(
                 continue
             source_name = graph.nodes[source].get("name", source)
             target_name = graph.nodes[target].get("name", target)
-            current_name = source_name if asks_model_max else target_name
+            current_name = source_name
             if current_name not in winning_set:
                 continue
 
@@ -433,7 +416,7 @@ def _statistics_answer(
         return None
 
     return Answer(
-        text="\\n".join(answers),
+        text="\n".join(answers),
         sources=_edge_sources(graph, selected_edges),
         facts=list(dict.fromkeys(facts)),
     )
