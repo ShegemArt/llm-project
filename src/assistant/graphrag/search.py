@@ -386,9 +386,7 @@ def _statistics_answer(
             if data.get("type") != "FAILED":
                 continue
             source_name = graph.nodes[source].get("name", source)
-            target_name = graph.nodes[target].get("name", target)
-            current_name = source_name
-            if current_name not in winning_set:
+            if source_name not in winning_set:
                 continue
 
             # Учитываем только модели выбранной линейки.
