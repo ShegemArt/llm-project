@@ -237,7 +237,7 @@ def _direct_local_answer(
 
     asks_product_line = bool(
         re.search(
-            r"в\\s+какую\\s+линейк\\w*|к\\s+какой\\s+линейк\\w*",
+            r"в\s+какую\s+линейк\w*|к\s+какой\s+линейк\w*",
             lowered,
         )
     )
@@ -266,7 +266,7 @@ def _direct_local_answer(
                 )
         if answers:
             return Answer(
-                text="\\n".join(answers),
+                text="\n".join(answers),
                 sources=_edge_sources(graph, selected_edges),
                 facts=list(dict.fromkeys(facts)),
             )
