@@ -1076,6 +1076,21 @@ def run_agent(
             args = raw_args if isinstance(raw_args, dict) else {"_raw": str(raw_args)}
             step_args = dict(args)
 
+            if name in {"search_knowledge", "summarize_topic"} and any(
+                previous.tool == name for previous in steps
+            ):
+                result = {
+                    "error": (
+                        f"Инструмент {name} уже выполнялся. "
+                        "Используй полученный результат вместо повторного поиска."
+                    )
+                }
+                steps.append(
+                    ToolStep(tool=name, args=step_args, error=result["error"])
+                )
+                messages.append(tool_message(call, result))
+                continue
+
             if name not in tools:
                 result = {"error": f"Неизвестный инструмент: {name}"}
                 steps.append(ToolStep(tool=name, args=step_args, error=result["error"]))
