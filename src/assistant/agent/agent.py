@@ -76,6 +76,82 @@ AGENT_SYSTEM_PROMPT = (
 )
 
 
+def _asks_price_question(question: str) -> bool:
+    """Распознаёт цену, включая формулировку «сколько она стоит»."""
+    return bool(
+        re.search(
+            r"сколько\\s+(?:(?:она|он|оно|это|эта\\s+деталь|данная\\s+деталь)\\s+)?стоит|"
+            r"стоимост\\w*|цен\\w*|по\\s+какой\\s+цене",
+            question.casefold(),
+        )
+    )
+
+
+def _asks_stock_question(question: str) -> bool:
+    """Распознаёт вопросы об остатках и наличии на складах."""
+    return bool(
+        re.search(
+            r"на\\s+складе|в\\s+наличии|остат\\w*|сколько\\s+штук|есть\\s+ли|где\\s+есть",
+            question.casefold(),
+        )
+    )
+
+
+def _stock_answer_if_ignored(
+    question: str,
+    response_text: str,
+    steps: list[ToolStep],
+    *,
+    search_requested: bool = False,
+) -> str | None:
+    """Возвращает подтверждённый ERP-остаток, если модель уходит от ответа."""
+    if not _asks_stock_question(question):
+        return None
+    if not search_requested and not re.search(
+        r"недостаточно\\s+данных|нет\\s+информац|не\\s+могу\\s+определить|"
+        r"невозможно\\s+определить|нельзя\\s+определить|не\\s+указан",
+        response_text,
+        re.IGNORECASE,
+    ):
+        return None
+
+    requested_parts = {
+        code for code in find_codes(question)
+        if code_type(code) == "Part"
+    }
+    if len(requested_parts) > 1:
+        return None
+
+    requested_part = next(iter(requested_parts), None)
+    for step in reversed(steps):
+        if step.tool != "check_stock" or step.error or not isinstance(step.result, dict):
+            continue
+        result = step.result
+        part_id = result.get("part_id") or step.args.get("part_id")
+        quantity = result.get("qty")
+        warehouse = result.get("warehouse") or step.args.get("warehouse")
+        if requested_part is not None and part_id != requested_part:
+            continue
+        if (
+            not isinstance(part_id, str)
+            or isinstance(quantity, bool)
+            or not isinstance(quantity, int)
+            or not isinstance(warehouse, str)
+        ):
+            continue
+
+        status = (
+            "Деталь снята с производства."
+            if result.get("discontinued") is True
+            else "Деталь не снята с производства."
+        )
+        return (
+            f"На складе «{warehouse}» имеется {quantity} шт. детали {part_id}. "
+            f"{status}"
+        )
+    return None
+
+
 def _available_tool_schemas(
     question: str,
     steps: list[ToolStep],
@@ -90,16 +166,23 @@ def _available_tool_schemas(
             lowered,
         )
     )
-    asks_price = bool(
-        re.search(r"сколько\s+стоит|стоимост\w*|цен\w*", lowered)
-    )
-    asks_stock = bool(
-        re.search(
-            r"остат\w*|на\s+складе|в\s+наличии|сколько\s+(?:штук|шт)|есть\s+ли|где\s+есть",
-            lowered,
-        )
-    )
+    asks_price = _asks_price_question(question)
+    asks_stock = _asks_stock_question(question)
     asks_order = _asks_for_order(question)
+
+    codes = find_codes(question)
+    explicit_parts = {
+        code for code in codes if code_type(code) == "Part"
+    }
+    has_model_or_error = any(
+        code_type(code) in {"Model", "ErrorCode"}
+        for code in codes
+    )
+    direct_erp_lookup = (
+        len(explicit_parts) == 1
+        and not has_model_or_error
+        and (asks_stock or asks_price)
+    )
 
     used = {step.tool for step in steps}
     available = []
@@ -109,13 +192,29 @@ def _available_tool_schemas(
         name = function.get("name")
 
         if name == "search_knowledge":
-            if asks_global or name in used:
+            if asks_global or name in used or direct_erp_lookup:
                 continue
         elif name == "summarize_topic":
             if not asks_global or name in used:
                 continue
-        elif name == "check_stock" and not (asks_stock or asks_order):
-            continue
+        elif name == "check_stock":
+            if not (asks_stock or asks_order):
+                continue
+            part_id = (
+                next(iter(explicit_parts))
+                if len(explicit_parts) == 1
+                else _resolve_part_from_knowledge(question, steps)
+            )
+            warehouse = _warehouse_from_question(question)
+            if part_id and warehouse and any(
+                step.tool == "check_stock"
+                and isinstance(step.args, dict)
+                and step.args.get("part_id") == part_id
+                and step.args.get("warehouse") == warehouse
+                and step.error is None
+                for step in steps
+            ):
+                continue
         elif name == "get_price" and not asks_price:
             continue
         elif name == "create_service_order" and not asks_order:
@@ -383,12 +482,16 @@ def _extract_stock_values(text: str) -> set[str]:
     return values
 
 
-def _tool_result_codes(result: dict) -> set[str]:
-    """Извлекает подтверждённые коды из фактов графа или структурированных полей ERP."""
+def _tool_result_codes(
+    result: dict,
+    *,
+    tool_name: str | None = None,
+    question: str = "",
+) -> set[str]:
+    """Извлекает коды только из подтверждённых фактов и полей инструментов."""
     facts = result.get("facts")
     if isinstance(facts, list):
-        # Не доверяем свободному тексту ответа, который могла сгенерировать LLM.
-        trusted_text = "\n".join(
+        trusted_text = "\\n".join(
             fact for fact in facts if isinstance(fact, str)
         )
         return set(find_codes(trusted_text))
@@ -399,7 +502,23 @@ def _tool_result_codes(result: dict) -> set[str]:
         if isinstance(result.get(key), str)
     }
     serialized = json.dumps(trusted_fields, ensure_ascii=False, default=str)
-    return set(find_codes(serialized))
+    codes = set(find_codes(serialized))
+
+    # Для вопросов о снятых деталях global_search возвращает детерминированный
+    # результат, рассчитанный непосредственно по связям REPLACED_BY.
+    asks_discontinued = bool(
+        re.search(r"снят\\w*\\s+с\\s+производств", question, re.IGNORECASE)
+    )
+    if (
+        tool_name == "summarize_topic"
+        and asks_discontinued
+        and result.get("refused") is False
+        and isinstance(result.get("answer"), str)
+    ):
+        codes.update(find_codes(result["answer"]))
+
+    return codes
+
 
 def _validate_answer(
     answer: str,
@@ -647,15 +766,8 @@ def _fallback_tool_request(
         part_id = _resolve_part_from_knowledge(question, steps)
 
     warehouse = _warehouse_from_question(question)
-    asks_stock = bool(
-        re.search(
-            r"на\s+складе|в\s+наличии|остат\w*|сколько\s+штук|есть\s+ли",
-            lowered,
-        )
-    )
-    asks_price = bool(
-        re.search(r"сколько\s+стоит|стоимость|цена|по\s+какой\s+цене", lowered)
-    )
+    asks_stock = _asks_stock_question(question)
+    asks_price = _asks_price_question(question)
     asks_order = bool(
         re.search(
             r"\b(?:оформи|создай|сформируй)\s+заказ\b|\bзакажи\s+\d+\b",
@@ -708,22 +820,28 @@ def _fallback_tool_request(
     if any(step.tool == "search_knowledge" for step in steps):
         return None
 
-    needs_knowledge = any(
-        code_type(code) in {"Model", "ErrorCode", "Procedure"} for code in codes
-    ) or bool(
-        re.search(
-            r"ошибк\w*|регламент\w*|модел\w*|узел\w*|компонент\w*|"
-            r"детал\w*|поставщик\w*|поставля\w*|в\s+каких\s+моделях",
-            lowered,
+    explicit_part_lookup = (
+        len(part_codes) == 1
+        and not any(code_type(code) in {"Model", "ErrorCode"} for code in codes)
+        and (asks_stock or asks_price)
+    )
+    needs_knowledge = not explicit_part_lookup and (
+        any(
+            code_type(code) in {"Model", "ErrorCode", "Procedure"}
+            for code in codes
+        )
+        or bool(
+            re.search(
+                r"ошибк\\w*|регламент\\w*|модел\\w*|узел\\w*|компонент\\w*|"
+                r"детал\\w*|поставщик\\w*|поставля\\w*|в\\s+каких\\s+моделях",
+                lowered,
+            )
         )
     )
     if needs_knowledge:
         return "search_knowledge", {"question": question}
 
-    # Не повторяем запрос к ERP, если нужный инструмент уже вызывался.
-    # В частности, get_price и check_stock выше проверяются с учётом аргументов.
     return None
-
 
 def _extract_warehouse(question: str) -> str | None:
     """Совместимое имя для извлечения склада в цикле агента."""
@@ -822,6 +940,22 @@ def run_agent(
             tools=_available_tool_schemas(question, steps),
         )
 
+        stock_answer = _stock_answer_if_ignored(
+            question,
+            response.content,
+            steps,
+            search_requested=any(
+                call.name == "search_knowledge"
+                for call in response.tool_calls
+            ),
+        )
+        if stock_answer is not None:
+            return AgentResult(
+                answer=stock_answer,
+                steps=steps,
+                sources=sorted(sources),
+            )
+
         if not response.tool_calls:
             fallback = (
                 _fallback_tool_request(question, steps)
@@ -875,7 +1009,12 @@ def run_agent(
                             )
                         )
                         return AgentResult(
-                            answer="Заказ подготовлен и ожидает подтверждения пользователя.",
+                            answer=(
+                            f"Подготовлен заказ на {requested_qty} шт. детали "
+                            f"{args.get('part_id')} для модели {args.get('model')} "
+                            f"на складе {args.get('warehouse')}. "
+                            "Заказ ожидает подтверждения и пока не создан."
+                        ),
                             steps=steps,
                             sources=sorted(sources),
                             needs_confirmation=True,
@@ -1258,7 +1397,13 @@ def run_agent(
             messages.append(tool_message(call, result))
 
             # Коды подтверждаются любым предыдущим результатом инструмента.
-            known_codes.update(_tool_result_codes(result))
+            known_codes.update(
+                _tool_result_codes(
+                    result,
+                    tool_name=name,
+                    question=question,
+                )
+            )
             serialized_result = json.dumps(result, ensure_ascii=False, default=str)
             known_prices.update(_extract_price_values(serialized_result))
             known_stocks.update(_extract_stock_values(serialized_result))
