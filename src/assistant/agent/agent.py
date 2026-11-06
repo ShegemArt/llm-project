@@ -1351,9 +1351,9 @@ def run_agent(
                 messages.append(tool_message(call, result))
                 continue
 
-            if name == "search_knowledge":
-                # Не даём LLM потерять смысл отношения при переформулировке запроса.
-                # Полный исходный вопрос сохраняет коды, ограничения и тип искомого ответа.
+            if name in {"search_knowledge", "summarize_topic"}:
+                # Не даём LLM потерять смысл отношения или ограничения при
+                # переформулировке. Сохраняем полный исходный вопрос.
                 args = {**args, "question": question}
                 step_args = dict(args)
 
