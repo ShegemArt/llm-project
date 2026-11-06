@@ -59,18 +59,72 @@ AGENT_SYSTEM_PROMPT = (
     "Ты — ассистент сервисной службы. Используй инструменты для получения фактов. "
     "Не выдумывай коды деталей, цены, остатки, статусы и результаты заказов. "
     "Код детали должен быть указан пользователем или подтверждён результатом инструмента. "
-    "Для вопросов о модели, ошибке, регламенте, детали, узле или поставщике "
-    "используй search_knowledge. Для цены используй get_price, для остатков "
-    "на конкретном складе — check_stock. При оформлении заказа сначала найди "
-    "актуальную деталь и проверь её остаток и статус производства. "
-    "Количество заказа должно быть явно указано пользователем. "
+    "Для конкретных фактов о модели, ошибке, регламенте, детали, узле или поставщике "
+    "используй search_knowledge ровно один раз. Для обзорных вопросов, статистики "
+    "отказов и перечней снятых с производства деталей используй summarize_topic "
+    "ровно один раз. Не повторяй поиск с тем же вопросом после получения результата. "
+    "Для цены используй get_price, для остатков на конкретном складе — check_stock. "
+    "При оформлении заказа сначала найди актуальную деталь и проверь её остаток "
+    "и статус производства. Количество заказа должно быть явно указано пользователем. "
     "Не создавай заказ без явного подтверждения пользователя. "
     "Поля qty и discontinued независимы: положительный остаток не отменяет "
-    "снятие детали с производства. Если discontinued=true, не оформляй заказ. "
-    "Не утверждай, что заказ создан, пока create_service_order не вернул "
-    "успешный результат с номером заказа. "
-    "В результатах поиска факты графа являются основным источником информации."
+    "снятие детали с производства. Если discontinued=true или остатка недостаточно, "
+    "не оформляй заказ. Не утверждай, что заказ создан, пока create_service_order "
+    "не вернул успешный результат с номером заказа. "
+    "В результатах search_knowledge используй прежде всего структурированные facts, "
+    "а не пересказ инструмента. Значения цены и остатка бери только из ERP."
 )
+
+
+def _available_tool_schemas(
+    question: str,
+    steps: list[ToolStep],
+) -> list[dict]:
+    """Возвращает только инструменты, подходящие для вопроса и текущего шага."""
+    lowered = question.casefold()
+    asks_global = bool(
+        re.search(
+            r"чаще\\s+всего|наиболее\\s+част|больше\\s+всего|"
+            r"наибольш\\w*|максимальн\\w*|статистик\\w*|частот\\w*|"
+            r"снят\\w*\\s+с\\s+производств",
+            lowered,
+        )
+    )
+    asks_price = bool(
+        re.search(r"сколько\\s+стоит|стоимост\\w*|цен\\w*", lowered)
+    )
+    asks_stock = bool(
+        re.search(
+            r"остат\\w*|на\\s+складе|в\\s+наличии|сколько\\s+(?:штук|шт)|есть\\s+ли",
+            lowered,
+        )
+    )
+    asks_order = _asks_for_order(question)
+
+    used = {step.tool for step in steps}
+    available = []
+
+    for schema in TOOL_SCHEMAS:
+        function = schema.get("function", {})
+        name = function.get("name")
+
+        if name == "search_knowledge":
+            if asks_global or name in used:
+                continue
+        elif name == "summarize_topic":
+            if not asks_global or name in used:
+                continue
+        elif name == "check_stock" and not (asks_stock or asks_order):
+            continue
+        elif name == "get_price" and not asks_price:
+            continue
+        elif name == "create_service_order" and not asks_order:
+            continue
+
+        available.append(schema)
+
+    return available
+
 
 
 def _compact_tool_history(steps: list[ToolStep]) -> str:
@@ -705,32 +759,7 @@ def run_agent(
 ) -> AgentResult:
     """Ведёт цикл агента с проверкой фактов и безопасным созданием заказов."""
     messages = [
-        {
-            "role": "system",
-            "content": (
-                "Ты ассистент сервисной службы. Используй инструменты для "
-                "получения фактов. Не выдумывай коды деталей, цены, остатки "
-                "и результаты заказов. Номер детали должен быть подтверждён "
-                "вопросом или результатом предыдущего инструмента. "
-                "Если вопрос содержит модель, код ошибки, регламент, деталь, "
-                "узел или поставщика, сначала используй search_knowledge. "
-                "Для вопросов о цене используй get_price, для остатков "
-                "на конкретном складе — check_stock. Если пользователь просит "
-                "оформить заказ, сначала найди нужную деталь и проверь её "
-                "остаток и статус производства. "
-                "Количество заказа должно быть явно указано пользователем. "
-                "Не создавай заказ без явного подтверждения пользователя. "
-                "Если ERP недоступна, сообщи об этом и не подменяй отсутствие "
-                "данных нулевым остатком. "
-                "В результате check_stock поля qty и discontinued независимы: "
-                "qty — фактический остаток, discontinued — статус производства. "
-                "Если qty больше нуля, нельзя утверждать, что детали нет на складе. "
-                "Если discontinued=true, не оформляй заказ на эту деталь, "
-                "даже если qty больше нуля. "
-                "Не утверждай, что заказ создан, пока create_service_order "
-                "не вернул успешный результат с номером заказа."
-            ),
-        },
+        {"role": "system", "content": AGENT_SYSTEM_PROMPT},
         {"role": "user", "content": question},
     ]
 
@@ -1210,6 +1239,27 @@ def run_agent(
                 if isinstance(tool_sources, list):
                     sources.update(str(source) for source in tool_sources)
                 knowledge_refused = knowledge_refused or bool(result.get("refused"))
+
+                # Отказ поиска — конечный результат. Повторный поиск не добавит
+                # информации и раньше приводил к исчерпанию лимита шагов.
+                if result.get("refused") or (
+                    name == "search_knowledge"
+                    and isinstance(result.get("answer"), str)
+                    and re.search(
+                        r"в базе знаний не найдено|недостаточно данных",
+                        result["answer"],
+                        re.IGNORECASE,
+                    )
+                ):
+                    refusal_text = result.get("answer") or result.get("error") or (
+                        "В базе знаний не найдено достаточно информации."
+                    )
+                    return AgentResult(
+                        answer=str(refusal_text),
+                        steps=steps,
+                        sources=sorted(sources),
+                        refused=True,
+                    )
 
             if name == "get_price":
                 price = result.get("price_rub")
