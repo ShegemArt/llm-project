@@ -199,6 +199,246 @@ def _global_graph_statistics(graph: nx.DiGraph) -> dict:
     }
 
 
+def _edge_sources(
+    graph: nx.DiGraph,
+    edges: set[tuple[str, str]],
+) -> list[str]:
+    """Возвращает документы, подтверждающие выбранные рёбра."""
+    sources: set[str] = set()
+    for source, target in edges:
+        data = graph.get_edge_data(source, target)
+        if not data:
+            continue
+        sources.update(
+            chunk_id.split("#", 1)[0]
+            for chunk_id in data.get("sources", [])
+        )
+    return sorted(sources)
+
+
+def _direct_local_answer(
+    question: str,
+    kb: KnowledgeBase,
+    anchor_nodes: set[str],
+) -> Answer | None:
+    """Отвечает по однозначным связям FIXED_BY и INDICATES без генерации."""
+    graph = kb.graph
+    lowered = question.casefold()
+    asks_procedure = bool(
+        re.search(r"регламент\\w*|процедур\\w*", lowered)
+    )
+    asks_indication = bool(
+        re.search(
+            r"что\\s+(?:означает|указывает)|на\\s+отказ\\s+какого\\s+узла|"
+            r"какой\\s+узел\\s+(?:отказал|неисправен)",
+            lowered,
+        )
+    )
+
+    if not (asks_procedure or asks_indication):
+        return None
+
+    error_nodes = {
+        node
+        for node in anchor_nodes
+        if node in graph and graph.nodes[node].get("type") == "ErrorCode"
+    }
+
+    # Запрос может быть сформулирован через название узла, без кода ошибки.
+    component_nodes = {
+        node
+        for node in anchor_nodes
+        if node in graph and graph.nodes[node].get("type") == "Component"
+    }
+    if component_nodes:
+        for component_node in component_nodes:
+            for error_node, _, data in graph.in_edges(
+                component_node,
+                data=True,
+            ):
+                if data.get("type") == "INDICATES":
+                    error_nodes.add(error_node)
+
+    selected_edges: set[tuple[str, str]] = set()
+    facts: list[str] = []
+    answers: list[str] = []
+
+    for error_node in sorted(error_nodes):
+        if asks_procedure:
+            candidates = [
+                (error_node, target)
+                for _, target, data in graph.out_edges(
+                    error_node,
+                    data=True,
+                )
+                if data.get("type") == "FIXED_BY"
+            ]
+            for source, target in candidates:
+                selected_edges.add((source, target))
+                facts.append(_format_edge(graph, source, target, graph.edges[source, target]))
+                answers.append(
+                    f"Ошибка {graph.nodes[source].get('name', source)} "
+                    f"устраняется по регламенту "
+                    f"{graph.nodes[target].get('name', target)}."
+                )
+        else:
+            candidates = [
+                (error_node, target)
+                for _, target, data in graph.out_edges(
+                    error_node,
+                    data=True,
+                )
+                if data.get("type") == "INDICATES"
+            ]
+            for source, target in candidates:
+                selected_edges.add((source, target))
+                facts.append(_format_edge(graph, source, target, graph.edges[source, target]))
+                answers.append(
+                    f"Ошибка {graph.nodes[source].get('name', source)} "
+                    f"указывает на отказ узла "
+                    f"{graph.nodes[target].get('name', target)}."
+                )
+
+    if not answers:
+        return None
+
+    return Answer(
+        text="\\n".join(dict.fromkeys(answers)),
+        sources=_edge_sources(graph, selected_edges),
+        facts=list(dict.fromkeys(facts)),
+    )
+
+
+def _statistics_answer(
+    question: str,
+    kb: KnowledgeBase,
+) -> Answer | None:
+    """Программно отвечает на вопросы о максимальной частоте отказов."""
+    lowered = question.casefold()
+    asks_component_max = bool(
+        re.search(
+            r"чаще\\s+всего|наиболее\\s+част|сам\\w*\\s+част\\w*",
+            lowered,
+        )
+    )
+    asks_model_max = bool(
+        re.search(
+            r"больше\\s+всего\\s+отказ|наибольш\\w*\\s+количеств\\w*\\s+отказ|"
+            r"максимальн\\w*\\s+количеств\\w*\\s+отказ",
+            lowered,
+        )
+    )
+
+    if not (asks_component_max or asks_model_max):
+        return None
+
+    line_names = sorted(
+        {
+            name
+            for kind, name in find_names(question, kb.vocabulary)
+            if kind == "ProductLine"
+        }
+    )
+    if not line_names:
+        return None
+
+    graph = kb.graph
+    statistics = _global_graph_statistics(graph)
+    if asks_model_max:
+        rows = statistics["failures_by_line_and_model"]
+        label_key = "model"
+        title = "Модель"
+    else:
+        rows = statistics["failures_by_line_and_component"]
+        label_key = "component"
+        title = "Узел"
+
+    selected_rows = [
+        row for row in rows
+        if row["line"] in line_names
+    ]
+    if not selected_rows:
+        return None
+
+    grouped: dict[str, list[dict]] = {}
+    for row in selected_rows:
+        grouped.setdefault(row["line"], []).append(row)
+
+    selected_edges: set[tuple[str, str]] = set()
+    facts: list[str] = []
+    answers: list[str] = []
+
+    for line_name in line_names:
+        line_rows = grouped.get(line_name, [])
+        if not line_rows:
+            continue
+
+        maximum = max(row["count"] for row in line_rows)
+        winners = sorted(
+            (row for row in line_rows if row["count"] == maximum),
+            key=lambda row: row[label_key],
+        )
+        winner_names = [row[label_key] for row in winners]
+
+        if len(winner_names) == 1:
+            answer_subject = winner_names[0]
+            answers.append(
+                f"В линейке «{line_name}» чаще всего отказывает "
+                f"{answer_subject}: {maximum} отказов."
+                if not asks_model_max
+                else (
+                    f"В линейке «{line_name}» наибольшее количество отказов "
+                    f"у модели {answer_subject}: {maximum}."
+                )
+            )
+        else:
+            joined = ", ".join(winner_names)
+            answers.append(
+                f"В линейке «{line_name}» максимальное количество отказов "
+                f"({maximum}) имеют несколько вариантов: {joined}."
+            )
+
+        winning_set = set(winner_names)
+        for source, target, data in graph.edges(data=True):
+            if data.get("type") != "FAILED":
+                continue
+            source_name = graph.nodes[source].get("name", source)
+            target_name = graph.nodes[target].get("name", target)
+            current_name = source_name if asks_model_max else target_name
+            if current_name not in winning_set:
+                continue
+
+            # Учитываем только модели выбранной линейки.
+            belongs = [
+                (source, line_target)
+                for _, line_target, edge_data in graph.out_edges(
+                    source,
+                    data=True,
+                )
+                if edge_data.get("type") == "BELONGS_TO"
+                and graph.nodes[line_target].get("name") == line_name
+            ]
+            if not belongs:
+                continue
+
+            selected_edges.add((source, target))
+            selected_edges.update(belongs)
+            facts.append(_format_edge(graph, source, target, data))
+            for left, right in belongs:
+                facts.append(
+                    _format_edge(graph, left, right, graph.edges[left, right])
+                )
+
+    if not answers:
+        return None
+
+    return Answer(
+        text="\\n".join(answers),
+        sources=_edge_sources(graph, selected_edges),
+        facts=list(dict.fromkeys(facts)),
+    )
+
+
 def _discontinued_parts_answer(
     question: str,
     kb: KnowledgeBase,
@@ -353,6 +593,10 @@ def local_search(
             refused=True,
         )
 
+    direct_answer = _direct_local_answer(question, kb, anchor_nodes)
+    if direct_answer is not None:
+        return direct_answer
+
     selected_edges: set[tuple[str, str]] = set()
     undirected = graph.to_undirected()
 
@@ -487,6 +731,10 @@ def global_search(
     discontinued_answer = _discontinued_parts_answer(question, kb)
     if discontinued_answer is not None:
         return discontinued_answer
+
+    statistics_answer = _statistics_answer(question, kb)
+    if statistics_answer is not None:
+        return statistics_answer
 
     partial_answers = []
     sources = set()
