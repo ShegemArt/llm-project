@@ -108,8 +108,8 @@ def _stock_answer_if_ignored(
     if not _asks_stock_question(question):
         return None
     if not search_requested and not re.search(
-        r"недостаточно\\s+данных|нет\\s+информац|не\\s+могу\\s+определить|"
-        r"невозможно\\s+определить|нельзя\\s+определить|не\\s+указан",
+        r"недостаточно\s+данных|нет\s+информац|не\s+могу\s+определить|"
+        r"невозможно\s+определить|нельзя\s+определить|не\s+указан",
         response_text,
         re.IGNORECASE,
     ):
