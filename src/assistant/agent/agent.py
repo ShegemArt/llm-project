@@ -52,6 +52,194 @@ VALUE_CONTEXT_BARRIER_PATTERN = re.compile(
 SENTENCE_BREAK_PATTERN = re.compile(r"[.!?;\n]")
 
 
+
+AGENT_HISTORY_CHAR_LIMIT = 3500
+
+AGENT_SYSTEM_PROMPT = (
+    "Ты — ассистент сервисной службы. Используй инструменты для получения фактов. "
+    "Не выдумывай коды деталей, цены, остатки, статусы и результаты заказов. "
+    "Код детали должен быть указан пользователем или подтверждён результатом инструмента. "
+    "Для вопросов о модели, ошибке, регламенте, детали, узле или поставщике "
+    "используй search_knowledge. Для цены используй get_price, для остатков "
+    "на конкретном складе — check_stock. При оформлении заказа сначала найди "
+    "актуальную деталь и проверь её остаток и статус производства. "
+    "Количество заказа должно быть явно указано пользователем. "
+    "Не создавай заказ без явного подтверждения пользователя. "
+    "Поля qty и discontinued независимы: положительный остаток не отменяет "
+    "снятие детали с производства. Если discontinued=true, не оформляй заказ. "
+    "Не утверждай, что заказ создан, пока create_service_order не вернул "
+    "успешный результат с номером заказа. "
+    "В результатах поиска факты графа являются основным источником информации."
+)
+
+
+def _compact_tool_history(steps: list[ToolStep]) -> str:
+    """Формирует компактную историю результатов инструментов для LLM.
+
+    Полные результаты остаются в ToolStep. Для контекста модели сохраняются
+    только факты, необходимые для продолжения работы.
+    Источники документов не передаются повторно.
+    """
+    facts: list[str] = []
+    summaries: list[str] = []
+    erp_results: list[str] = []
+    errors: list[str] = []
+
+    seen_facts: set[str] = set()
+
+    erp_fields = (
+        "part_id",
+        "warehouse",
+        "qty",
+        "price_rub",
+        "discontinued",
+        "order_id",
+        "status",
+    )
+
+    argument_fields = (
+        "part_id",
+        "warehouse",
+        "qty",
+        "model",
+    )
+
+    for step in steps:
+        result = step.result if isinstance(step.result, dict) else {}
+
+        error = step.error or result.get("error")
+        if error:
+            errors.append(f"{step.tool}: {str(error)[:200]}")
+
+        if step.tool == "search_knowledge":
+            # Факты предпочтительнее сгенерированного ответа:
+            # ответ поиска может ошибочно утверждать, что данных нет,
+            # хотя необходимые отношения присутствуют в facts.
+            for fact in result.get("facts", []):
+                if not isinstance(fact, str) or fact in seen_facts:
+                    continue
+
+                seen_facts.add(fact)
+                facts.append(fact[:220])
+
+            # Если фактов нет, сохраняем хотя бы текст ответа.
+            if not result.get("facts") and isinstance(result.get("answer"), str):
+                summaries.append(result["answer"][:500])
+
+        elif step.tool == "summarize_topic":
+            answer = result.get("answer")
+            if isinstance(answer, str) and answer.strip():
+                summaries.append(answer[:900])
+
+        elif step.tool in ERP_TOOLS:
+            values = {
+                key: result[key]
+                for key in erp_fields
+                if key in result
+            }
+
+            args = {
+                key: step.args[key]
+                for key in argument_fields
+                if key in step.args
+            }
+
+            if values:
+                erp_results.append(
+                    f"{step.tool}: "
+                    f"{json.dumps(values, ensure_ascii=False)}"
+                )
+            elif args and not error:
+                erp_results.append(
+                    f"{step.tool}: "
+                    f"{json.dumps(args, ensure_ascii=False)}"
+                )
+
+    # Цепочки замен важнее остальных дополнительных фактов:
+    # они необходимы для определения актуальной детали.
+    priority_facts = [
+        fact
+        for fact in facts
+        if "Цепочка замен:" in fact
+        or "Последняя деталь в однозначной цепочке" in fact
+    ]
+
+    ordinary_facts = [
+        fact
+        for fact in facts
+        if fact not in priority_facts
+    ]
+
+    prioritized_facts = priority_facts + ordinary_facts
+
+    sections: list[str] = []
+
+    if errors:
+        sections.append(
+            "Ошибки инструментов:\n" + "\n".join(errors[-4:])
+        )
+
+    if erp_results:
+        sections.append(
+            "Результаты ERP:\n" + "\n".join(erp_results[-4:])
+        )
+
+    if summaries:
+        sections.append(
+            "Ответы инструментов:\n" + "\n".join(summaries[-2:])
+        )
+
+    base = "\n\n".join(sections)
+
+    header = "Подтверждённые факты графа:\n"
+    included_facts: list[str] = []
+
+    # Добавляем факты, пока не достигнут лимит контекста.
+    current_length = len(base) + len(header)
+
+    for fact in prioritized_facts[:32]:
+        line = f"- {fact}\n"
+
+        if current_length + len(line) > AGENT_HISTORY_CHAR_LIMIT:
+            break
+
+        included_facts.append(line)
+        current_length += len(line)
+
+    if included_facts:
+        sections.append(header + "".join(included_facts).rstrip())
+
+    return "\n\n".join(sections)
+
+
+def _build_agent_messages(
+    question: str,
+    steps: list[ToolStep],
+) -> list[dict]:
+    """Строит новый компактный контекст для каждого обращения к LLM."""
+    user_content = f"Вопрос пользователя:\n{question}"
+
+    history = _compact_tool_history(steps)
+
+    if history:
+        user_content += (
+            "\n\nРезультаты предыдущих вызовов инструментов:\n"
+            + history
+        )
+
+    return [
+        {
+            "role": "system",
+            "content": AGENT_SYSTEM_PROMPT,
+        },
+        {
+            "role": "user",
+            "content": user_content,
+        },
+    ]
+
+
+
 def _as_dict(value: Any) -> dict:
     """Приводит результат инструмента к словарю."""
     if isinstance(value, dict):
@@ -586,7 +774,10 @@ def run_agent(
                         sources=sorted(sources),
                     )
 
-        response = llm.chat(messages, tools=TOOL_SCHEMAS)
+        response = llm.chat(
+            messages,
+            tools=_available_tool_schemas(question, steps),
+        )
 
         if not response.tool_calls:
             fallback = (
@@ -775,32 +966,31 @@ def run_agent(
             )
 
             if _has_unsupported_facts(violations):
-                history = json.dumps(messages, ensure_ascii=False, default=str)
+                history = _compact_tool_history(steps)
                 correction = llm.chat(
                     [
                         {
                             "role": "system",
                             "content": (
-                                "Исправь ответ, используя только вопрос и "
-                                "результаты вызовов инструментов. Удали все "
-                                "неподтверждённые коды деталей, цены и остатки. "
-                                "Не заменяй их догадками. Если данных недостаточно, "
-                                "прямо сообщи об этом."
+                                "Исправь ответ, используя только вопрос и результаты "
+                                "вызовов инструментов. Удали все неподтверждённые коды "
+                                "деталей, цены и остатки. Не заменяй их догадками. "
+                                "Если данных недостаточно, прямо сообщи об этом."
                             ),
                         },
                         {
                             "role": "user",
                             "content": (
                                 f"Вопрос: {question}\n"
-                                "История: "
-                                f"{history}"
-                                "\n"
+                                "Результаты инструментов:\n"
+                                f"{history}\n"
                                 f"Неподтверждённые сведения: "
                                 f"{json.dumps(violations, ensure_ascii=False)}\n"
                                 f"Ответ, который нужно исправить: {answer}"
                             ),
                         },
-                    ]
+                    ],
+                    max_tokens=384,
                 )
                 answer = correction.content.strip()
 

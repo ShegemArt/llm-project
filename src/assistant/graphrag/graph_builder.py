@@ -1,3 +1,6 @@
+
+"""Построение направленного графа знаний (FR-2)."""
+
 import networkx as nx
 
 from assistant.infra.schemas import ExtractionResult
@@ -59,10 +62,12 @@ def build_graph(results: list[ExtractionResult]) -> nx.DiGraph:
             continue
 
         reverse = graph.get_edge_data(target, source)
+
         if not reverse or reverse.get("type") != "REPLACED_BY":
             continue
 
         pair = frozenset((source, target))
+
         if pair in to_remove:
             continue
 
@@ -81,4 +86,5 @@ def build_graph(results: list[ExtractionResult]) -> nx.DiGraph:
         to_remove.add(pair)
 
     graph.graph["conflicts"] = conflicts
+
     return graph
