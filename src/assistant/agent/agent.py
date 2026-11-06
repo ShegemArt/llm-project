@@ -104,12 +104,12 @@ def _stock_answer_if_ignored(
     *,
     search_requested: bool = False,
 ) -> str | None:
-    """Возвращает подтверждённый ERP-остаток, если модель уходит от ответа."""
+    """Формирует ответ по полученным ERP-данным, если LLM их игнорирует."""
     if not _asks_stock_question(question):
         return None
     if not search_requested and not re.search(
-        r"недостаточно\s+данных|нет\s+информац|не\s+могу\s+определить|"
-        r"невозможно\s+определить|нельзя\s+определить|не\s+указан",
+        r"недостаточно\\s+данных|нет\\s+информац|не\\s+могу\\s+определить|"
+        r"невозможно\\s+определить|нельзя\\s+определить|не\\s+указан",
         response_text,
         re.IGNORECASE,
     ):
@@ -123,6 +123,9 @@ def _stock_answer_if_ignored(
         return None
 
     requested_part = next(iter(requested_parts), None)
+    stock_result = None
+    stock_part = None
+    stock_warehouse = None
     for step in reversed(steps):
         if step.tool != "check_stock" or step.error or not isinstance(step.result, dict):
             continue
@@ -139,17 +142,66 @@ def _stock_answer_if_ignored(
             or not isinstance(warehouse, str)
         ):
             continue
+        stock_result = result
+        stock_part = part_id
+        stock_warehouse = warehouse
+        break
 
-        status = (
-            "Деталь снята с производства."
-            if result.get("discontinued") is True
-            else "Деталь не снята с производства."
+    if stock_result is None:
+        return None
+
+    parts = [
+        f"На складе «{stock_warehouse}» имеется "
+        f"{stock_result['qty']} шт. детали {stock_part}."
+    ]
+    parts.append(
+        "Деталь снята с производства."
+        if stock_result.get("discontinued") is True
+        else "Деталь не снята с производства."
+    )
+
+    if _asks_price_question(question):
+        price_result = next(
+            (
+                step.result
+                for step in reversed(steps)
+                if step.tool == "get_price"
+                and step.error is None
+                and isinstance(step.result, dict)
+                and isinstance(step.result.get("price_rub"), int | float)
+                and not isinstance(step.result.get("price_rub"), bool)
+                and step.result.get("part_id", stock_part) == stock_part
+            ),
+            None,
         )
-        return (
-            f"На складе «{warehouse}» имеется {quantity} шт. детали {part_id}. "
-            f"{status}"
+        price_error = next(
+            (
+                step.error or step.result.get("error")
+                for step in reversed(steps)
+                if step.tool == "get_price"
+                and (
+                    step.error
+                    or isinstance(step.result, dict) and step.result.get("error")
+                )
+            ),
+            None,
         )
-    return None
+        if price_result is None and price_error is None:
+            # Не завершаем комбинированный запрос, пока не попробовали получить цену.
+            return None
+        if price_result is not None:
+            price = price_result["price_rub"]
+            formatted_price = (
+                f"{price:,.0f}".replace(",", " ")
+                if isinstance(price, int | float)
+                else str(price)
+            )
+            parts.append(f"Цена детали — {formatted_price} руб.")
+        else:
+            parts.append(f"Цену получить не удалось: {price_error}")
+
+    return " ".join(parts)
+
 
 
 def _available_tool_schemas(
