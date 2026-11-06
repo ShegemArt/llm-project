@@ -221,7 +221,7 @@ def _direct_local_answer(
     kb: KnowledgeBase,
     anchor_nodes: set[str],
 ) -> Answer | None:
-    """Отвечает по однозначным связям FIXED_BY и INDICATES без генерации."""
+    """Отвечает напрямую по однозначным связям графа без генерации LLM."""
     graph = kb.graph
     lowered = question.casefold()
     asks_procedure = bool(
