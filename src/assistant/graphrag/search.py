@@ -276,7 +276,7 @@ def _direct_local_answer(
 
         if answers:
             return Answer(
-                text="\\n".join(sorted(set(answers))),
+                text="\n".join(sorted(set(answers))),
                 sources=_edge_sources(graph, selected_edges),
                 facts=list(dict.fromkeys(facts)),
             )
