@@ -509,12 +509,22 @@ def _tool_result_codes(
     asks_discontinued = bool(
         re.search(r"снят\w*\s+с\s+производств", question, re.IGNORECASE)
     )
+    asks_model_failure_max = bool(
+        re.search(
+            r"больше\s+всего\s+отказ|наибольш\w*\s+количеств\w*\s+отказ|"
+            r"максимальн\w*\s+количеств\w*\s+отказ",
+            question,
+            re.IGNORECASE,
+        )
+    )
     if (
         tool_name == "summarize_topic"
-        and asks_discontinued
+        and (asks_discontinued or asks_model_failure_max)
         and result.get("refused") is False
         and isinstance(result.get("answer"), str)
     ):
+        # Для этих двух классов global_search строит ответ напрямую по графу,
+        # не используя LLM для выбора кодов деталей или моделей.
         codes.update(find_codes(result["answer"]))
 
     return codes
