@@ -1,6 +1,8 @@
+
 """Извлечение сущностей и связей из одного чанка (FR-1)."""
 
 import json
+import re
 
 from assistant.infra.config import vocabulary
 from assistant.infra.grounding import (
@@ -18,6 +20,22 @@ from assistant.infra.schemas import (
 )
 
 _CODE_ENTITY_TYPES = {"Model", "Part", "ErrorCode", "Procedure"}
+
+# Явная конструкция замены из сервисных бюллетеней:
+# «Деталь P-1000 снята с производства.
+#  Вместо неё устанавливается деталь P-1000B».
+_EXPLICIT_REPLACEMENT_PATTERN = re.compile(
+    r"""
+    \bдеталь\s+
+    (?P<old>P-[A-Z0-9]+)\b
+    (?:(?![.!?])[\s\S]){0,160}?
+    \bснята\s+с\s+производства\b
+    \s*[.!?]\s*
+    вместо\s+не[её]\s+устанавливается\s+деталь\s+
+    (?P<new>P-[A-Z0-9]+)\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
 
 
 def _validated_entity(
@@ -50,6 +68,115 @@ def _validated_entity(
         return None
 
     return Entity(entity_type, canonical)
+
+
+def _extract_explicit_replacements(
+    chunk_text: str,
+    codes_in_text: set[str],
+    vocab: dict[str, list[str]],
+) -> dict[frozenset[str], tuple[Entity, Entity]]:
+    """Находит явно указанные пары старой и новой деталей.
+
+    Ключ — неупорядоченная пара кодов.
+    Значение — правильное направление (старая деталь, новая деталь).
+    """
+    replacements: dict[
+        frozenset[str],
+        tuple[Entity, Entity],
+    ] = {}
+
+    for match in _EXPLICIT_REPLACEMENT_PATTERN.finditer(chunk_text):
+        old_part = _validated_entity(
+            "Part",
+            match.group("old"),
+            chunk_text,
+            codes_in_text,
+            vocab,
+        )
+        new_part = _validated_entity(
+            "Part",
+            match.group("new"),
+            chunk_text,
+            codes_in_text,
+            vocab,
+        )
+
+        if old_part is None or new_part is None:
+            continue
+
+        if old_part.node_id == new_part.node_id:
+            continue
+
+        pair = frozenset((old_part.node_id, new_part.node_id))
+
+        replacements[pair] = (old_part, new_part)
+
+    return replacements
+
+
+def _correct_replacement_directions(
+    relations: list[Relation],
+    replacements: dict[frozenset[str], tuple[Entity, Entity]],
+) -> tuple[list[Relation], int]:
+    """Исправляет направление уже извлечённых отношений REPLACED_BY.
+
+    Новые отношения не создаются. Если LLM не извлекла отношение,
+    постобработка не должна самостоятельно добавлять его в результат.
+
+    Исправление применяется только к паре деталей, направление которой
+    явно подтверждено текстом текущего чанка.
+    """
+    corrected: list[Relation] = []
+    seen: set[tuple[str, str, str]] = set()
+    dropped = 0
+
+    for relation in relations:
+        if relation.type == "REPLACED_BY":
+            pair = frozenset(
+                (
+                    relation.subject.node_id,
+                    relation.object.node_id,
+                )
+            )
+
+            expected = replacements.get(pair)
+
+            if expected is not None:
+                old_part, new_part = expected
+
+                expected_key = (
+                    old_part.node_id,
+                    "REPLACED_BY",
+                    new_part.node_id,
+                )
+
+                actual_key = (
+                    relation.subject.node_id,
+                    relation.type,
+                    relation.object.node_id,
+                )
+
+                if actual_key != expected_key:
+                    relation = Relation(
+                        old_part,
+                        "REPLACED_BY",
+                        new_part,
+                    )
+                    dropped += 1
+
+        key = (
+            relation.subject.node_id,
+            relation.type,
+            relation.object.node_id,
+        )
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+        corrected.append(relation)
+
+    return corrected, dropped
 
 
 def _extraction_prompt(
@@ -86,6 +213,8 @@ ProductLine, Model, Component, Part, ErrorCode, Procedure, Supplier.
    ErrorCode -> Component (INDICATES).
 3. В бюллетене, если сказано, что старая деталь снята с производства и вместо неё
    устанавливается новая, извлеки старую Part -> новую Part (REPLACED_BY).
+   В конструкции «Деталь X снята с производства. Вместо неё устанавливается деталь Y»
+   субъектом REPLACED_BY является X, а объектом — Y.
    Если рядом с кодом детали в скобках указан вид узла, извлеки Part -> Component (IS_A).
    Если указан поставщик детали, извлеки Part -> Supplier (SUPPLIED_BY) именно для
    той детали, к которой относится поставщик.
@@ -257,12 +386,9 @@ def extract_chunk(chunk: Chunk, llm: LLMClient) -> ExtractionResult:
 
                 relation = Relation(subject, relation_type, obj)
 
-                # Qwen3 может менять местами начало и конец отношения.
-                # Сначала проверяем исходное направление.
                 if not relation.matches_schema():
                     reversed_relation = Relation(obj, relation_type, subject)
 
-                    # Исправляем направление только если обратное соответствует схеме.
                     if reversed_relation.matches_schema():
                         subject, obj = obj, subject
                         relation = reversed_relation
@@ -280,6 +406,21 @@ def extract_chunk(chunk: Chunk, llm: LLMClient) -> ExtractionResult:
 
                 entities[subject.node_id] = subject
                 entities[obj.node_id] = obj
+
+            # Направление REPLACED_BY исправляется только для отношений,
+            # которые LLM действительно вернула.
+            # Отсутствующие отношения автоматически не создаются.
+            explicit_replacements = _extract_explicit_replacements(
+                chunk.text,
+                codes_in_text,
+                vocab,
+            )
+
+            relations, corrected_dropped = _correct_replacement_directions(
+                relations,
+                explicit_replacements,
+            )
+            dropped += corrected_dropped
 
             return ExtractionResult(
                 chunk_id=chunk.chunk_id,

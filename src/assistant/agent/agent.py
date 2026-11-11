@@ -52,6 +52,399 @@ VALUE_CONTEXT_BARRIER_PATTERN = re.compile(
 SENTENCE_BREAK_PATTERN = re.compile(r"[.!?;\n]")
 
 
+
+AGENT_HISTORY_CHAR_LIMIT = 3500
+
+AGENT_SYSTEM_PROMPT = (
+    "Ты — ассистент сервисной службы. Используй инструменты для получения фактов. "
+    "Не выдумывай коды деталей, цены, остатки, статусы и результаты заказов. "
+    "Код детали должен быть указан пользователем или подтверждён результатом инструмента. "
+    "Для конкретных фактов о модели, ошибке, регламенте, детали, узле или поставщике "
+    "используй search_knowledge ровно один раз. Для обзорных вопросов, статистики "
+    "отказов и перечней снятых с производства деталей используй summarize_topic "
+    "ровно один раз. Не повторяй поиск с тем же вопросом после получения результата. "
+    "Для цены используй get_price, для остатков на конкретном складе — check_stock. "
+    "При оформлении заказа сначала найди актуальную деталь и проверь её остаток "
+    "и статус производства. Количество заказа должно быть явно указано пользователем. "
+    "Не создавай заказ без явного подтверждения пользователя. "
+    "Поля qty и discontinued независимы: положительный остаток не отменяет "
+    "снятие детали с производства. Если discontinued=true или остатка недостаточно, "
+    "не оформляй заказ. Не утверждай, что заказ создан, пока create_service_order "
+    "не вернул успешный результат с номером заказа. "
+    "В результатах search_knowledge используй прежде всего структурированные facts, "
+    "а не пересказ инструмента. Значения цены и остатка бери только из ERP."
+)
+
+
+def _asks_price_question(question: str) -> bool:
+    """Распознаёт цену, включая формулировку «сколько она стоит»."""
+    return bool(
+        re.search(
+            r"сколько\s+(?:(?:она|он|оно|это|эта\s+деталь|данная\s+деталь)\s+)?стоит|"
+            r"стоимост\w*|цен\w*|по\s+какой\s+цене",
+            question.casefold(),
+        )
+    )
+
+
+def _asks_stock_question(question: str) -> bool:
+    """Распознаёт вопросы об остатках и наличии на складах."""
+    return bool(
+        re.search(
+            r"на\s+складе|в\s+наличии|остат\w*|сколько\s+штук|есть\s+ли|где\s+есть",
+            question.casefold(),
+        )
+    )
+
+
+def _stock_answer_if_ignored(
+    question: str,
+    response_text: str,
+    steps: list[ToolStep],
+    *,
+    search_requested: bool = False,
+) -> str | None:
+    """Формирует ответ по полученным ERP-данным, если LLM их игнорирует."""
+    if not _asks_stock_question(question):
+        return None
+    if not search_requested and not re.search(
+        r"недостаточно\s+данных|нет\s+информац|не\s+могу\s+определить|"
+        r"невозможно\s+определить|нельзя\s+определить|не\s+указан",
+        response_text,
+        re.IGNORECASE,
+    ):
+        return None
+
+    requested_parts = {
+        code for code in find_codes(question)
+        if code_type(code) == "Part"
+    }
+    if len(requested_parts) > 1:
+        return None
+
+    requested_part = next(iter(requested_parts), None)
+    stock_result = None
+    stock_part = None
+    stock_warehouse = None
+    for step in reversed(steps):
+        if step.tool != "check_stock" or step.error or not isinstance(step.result, dict):
+            continue
+        result = step.result
+        part_id = result.get("part_id") or step.args.get("part_id")
+        quantity = result.get("qty")
+        warehouse = result.get("warehouse") or step.args.get("warehouse")
+        if requested_part is not None and part_id != requested_part:
+            continue
+        if (
+            not isinstance(part_id, str)
+            or isinstance(quantity, bool)
+            or not isinstance(quantity, int)
+            or not isinstance(warehouse, str)
+        ):
+            continue
+        stock_result = result
+        stock_part = part_id
+        stock_warehouse = warehouse
+        break
+
+    if stock_result is None:
+        return None
+
+    parts = [
+        f"На складе «{stock_warehouse}» имеется "
+        f"{stock_result['qty']} шт. детали {stock_part}."
+    ]
+    parts.append(
+        "Деталь снята с производства."
+        if stock_result.get("discontinued") is True
+        else "Деталь не снята с производства."
+    )
+
+    if _asks_price_question(question):
+        price_result = next(
+            (
+                step.result
+                for step in reversed(steps)
+                if step.tool == "get_price"
+                and step.error is None
+                and isinstance(step.result, dict)
+                and isinstance(step.result.get("price_rub"), int | float)
+                and not isinstance(step.result.get("price_rub"), bool)
+                and step.result.get("part_id", stock_part) == stock_part
+            ),
+            None,
+        )
+        price_error = next(
+            (
+                step.error or step.result.get("error")
+                for step in reversed(steps)
+                if step.tool == "get_price"
+                and (
+                    step.error
+                    or isinstance(step.result, dict) and step.result.get("error")
+                )
+            ),
+            None,
+        )
+        if price_result is None and price_error is None:
+            # Не завершаем комбинированный запрос, пока не попробовали получить цену.
+            return None
+        if price_result is not None:
+            price = price_result["price_rub"]
+            formatted_price = (
+                f"{price:,.0f}".replace(",", " ")
+                if isinstance(price, int | float)
+                else str(price)
+            )
+            parts.append(f"Цена детали — {formatted_price} руб.")
+        else:
+            parts.append(f"Цену получить не удалось: {price_error}")
+
+    return " ".join(parts)
+
+
+
+def _available_tool_schemas(
+    question: str,
+    steps: list[ToolStep],
+) -> list[dict]:
+    """Возвращает только инструменты, подходящие для вопроса и текущего шага."""
+    lowered = question.casefold()
+    asks_global = bool(
+        re.search(
+            r"чаще\s+всего|наиболее\s+част|больше\s+всего|"
+            r"наибольш\w*|максимальн\w*|статистик\w*|частот\w*|"
+            r"снят\w*\s+с\s+производств",
+            lowered,
+        )
+    )
+    asks_price = _asks_price_question(question)
+    asks_stock = _asks_stock_question(question)
+    asks_order = _asks_for_order(question)
+
+    codes = find_codes(question)
+    explicit_parts = {
+        code for code in codes if code_type(code) == "Part"
+    }
+    has_model_or_error = any(
+        code_type(code) in {"Model", "ErrorCode"}
+        for code in codes
+    )
+    direct_erp_lookup = (
+        len(explicit_parts) == 1
+        and not has_model_or_error
+        and (asks_stock or asks_price)
+    )
+
+    used = {step.tool for step in steps}
+    available = []
+
+    for schema in TOOL_SCHEMAS:
+        function = schema.get("function", {})
+        name = function.get("name")
+
+        if name == "search_knowledge":
+            if asks_global or name in used or direct_erp_lookup:
+                continue
+        elif name == "summarize_topic":
+            if not asks_global or name in used:
+                continue
+        elif name == "check_stock":
+            if not (asks_stock or asks_order):
+                continue
+            part_id = (
+                next(iter(explicit_parts))
+                if len(explicit_parts) == 1
+                else _resolve_part_from_knowledge(question, steps)
+            )
+            warehouse = _warehouse_from_question(question)
+            if part_id and warehouse and any(
+                step.tool == "check_stock"
+                and isinstance(step.args, dict)
+                and step.args.get("part_id") == part_id
+                and step.args.get("warehouse") == warehouse
+                and step.error is None
+                for step in steps
+            ):
+                continue
+        elif name == "get_price" and not asks_price:
+            continue
+        elif name == "create_service_order" and not asks_order:
+            continue
+
+        available.append(schema)
+
+    return available
+
+
+
+def _compact_tool_history(steps: list[ToolStep]) -> str:
+    """Формирует компактную историю результатов инструментов для LLM.
+
+    Полные результаты остаются в ToolStep. Для контекста модели сохраняются
+    только факты, необходимые для продолжения работы.
+    Источники документов не передаются повторно.
+    """
+    facts: list[str] = []
+    summaries: list[str] = []
+    erp_results: list[str] = []
+    errors: list[str] = []
+
+    seen_facts: set[str] = set()
+
+    erp_fields = (
+        "part_id",
+        "warehouse",
+        "qty",
+        "price_rub",
+        "discontinued",
+        "order_id",
+        "status",
+    )
+
+    argument_fields = (
+        "part_id",
+        "warehouse",
+        "qty",
+        "model",
+    )
+
+    for step in steps:
+        result = step.result if isinstance(step.result, dict) else {}
+
+        error = step.error or result.get("error")
+        if error:
+            errors.append(f"{step.tool}: {str(error)[:200]}")
+
+        if step.tool == "search_knowledge":
+            # Факты предпочтительнее сгенерированного ответа:
+            # ответ поиска может ошибочно утверждать, что данных нет,
+            # хотя необходимые отношения присутствуют в facts.
+            for fact in result.get("facts", []):
+                if not isinstance(fact, str) or fact in seen_facts:
+                    continue
+
+                seen_facts.add(fact)
+                facts.append(fact[:220])
+
+            # Если фактов нет, сохраняем хотя бы текст ответа.
+            if not result.get("facts") and isinstance(result.get("answer"), str):
+                summaries.append(result["answer"][:500])
+
+        elif step.tool == "summarize_topic":
+            answer = result.get("answer")
+            if isinstance(answer, str) and answer.strip():
+                summaries.append(answer[:900])
+
+        elif step.tool in ERP_TOOLS:
+            values = {
+                key: result[key]
+                for key in erp_fields
+                if key in result
+            }
+
+            args = {
+                key: step.args[key]
+                for key in argument_fields
+                if key in step.args
+            }
+
+            if values:
+                erp_results.append(
+                    f"{step.tool}: "
+                    f"{json.dumps(values, ensure_ascii=False)}"
+                )
+            elif args and not error:
+                erp_results.append(
+                    f"{step.tool}: "
+                    f"{json.dumps(args, ensure_ascii=False)}"
+                )
+
+    # Цепочки замен важнее остальных дополнительных фактов:
+    # они необходимы для определения актуальной детали.
+    priority_facts = [
+        fact
+        for fact in facts
+        if "Цепочка замен:" in fact
+        or "Последняя деталь в однозначной цепочке" in fact
+    ]
+
+    ordinary_facts = [
+        fact
+        for fact in facts
+        if fact not in priority_facts
+    ]
+
+    prioritized_facts = priority_facts + ordinary_facts
+
+    sections: list[str] = []
+
+    if errors:
+        sections.append(
+            "Ошибки инструментов:\n" + "\n".join(errors[-4:])
+        )
+
+    if erp_results:
+        sections.append(
+            "Результаты ERP:\n" + "\n".join(erp_results[-4:])
+        )
+
+    if summaries:
+        sections.append(
+            "Ответы инструментов:\n" + "\n".join(summaries[-2:])
+        )
+
+    base = "\n\n".join(sections)
+
+    header = "Подтверждённые факты графа:\n"
+    included_facts: list[str] = []
+
+    # Добавляем факты, пока не достигнут лимит контекста.
+    current_length = len(base) + len(header)
+
+    for fact in prioritized_facts[:32]:
+        line = f"- {fact}\n"
+
+        if current_length + len(line) > AGENT_HISTORY_CHAR_LIMIT:
+            break
+
+        included_facts.append(line)
+        current_length += len(line)
+
+    if included_facts:
+        sections.append(header + "".join(included_facts).rstrip())
+
+    return "\n\n".join(sections)
+
+
+def _build_agent_messages(
+    question: str,
+    steps: list[ToolStep],
+) -> list[dict]:
+    """Строит новый компактный контекст для каждого обращения к LLM."""
+    user_content = f"Вопрос пользователя:\n{question}"
+
+    history = _compact_tool_history(steps)
+
+    if history:
+        user_content += (
+            "\n\nРезультаты предыдущих вызовов инструментов:\n"
+            + history
+        )
+
+    return [
+        {
+            "role": "system",
+            "content": AGENT_SYSTEM_PROMPT,
+        },
+        {
+            "role": "user",
+            "content": user_content,
+        },
+    ]
+
+
+
 def _as_dict(value: Any) -> dict:
     """Приводит результат инструмента к словарю."""
     if isinstance(value, dict):
@@ -141,10 +534,52 @@ def _extract_stock_values(text: str) -> set[str]:
     return values
 
 
-def _tool_result_codes(result: dict) -> set[str]:
-    """Находит коды, появившиеся в любом поле ответа инструмента."""
-    serialized = json.dumps(result, ensure_ascii=False, default=str)
-    return set(find_codes(serialized))
+def _tool_result_codes(
+    result: dict,
+    *,
+    tool_name: str | None = None,
+    question: str = "",
+) -> set[str]:
+    """Извлекает коды только из подтверждённых фактов и полей инструментов."""
+    facts = result.get("facts")
+    if isinstance(facts, list):
+        trusted_text = "\n".join(
+            fact for fact in facts if isinstance(fact, str)
+        )
+        return set(find_codes(trusted_text))
+
+    trusted_fields = {
+        key: result[key]
+        for key in ("part_id", "model")
+        if isinstance(result.get(key), str)
+    }
+    serialized = json.dumps(trusted_fields, ensure_ascii=False, default=str)
+    codes = set(find_codes(serialized))
+
+    # Для вопросов о снятых деталях global_search возвращает детерминированный
+    # результат, рассчитанный непосредственно по связям REPLACED_BY.
+    asks_discontinued = bool(
+        re.search(r"снят\w*\s+с\s+производств", question, re.IGNORECASE)
+    )
+    asks_model_failure_max = bool(
+        re.search(
+            r"больше\s+всего\s+отказ|наибольш\w*\s+количеств\w*\s+отказ|"
+            r"максимальн\w*\s+количеств\w*\s+отказ",
+            question,
+            re.IGNORECASE,
+        )
+    )
+    if (
+        tool_name == "summarize_topic"
+        and (asks_discontinued or asks_model_failure_max)
+        and result.get("refused") is False
+        and isinstance(result.get("answer"), str)
+    ):
+        # Для этих двух классов global_search строит ответ напрямую по графу,
+        # не используя LLM для выбора кодов деталей или моделей.
+        codes.update(find_codes(result["answer"]))
+
+    return codes
 
 
 def _validate_answer(
@@ -393,15 +828,8 @@ def _fallback_tool_request(
         part_id = _resolve_part_from_knowledge(question, steps)
 
     warehouse = _warehouse_from_question(question)
-    asks_stock = bool(
-        re.search(
-            r"на\s+складе|в\s+наличии|остат\w*|сколько\s+штук|есть\s+ли",
-            lowered,
-        )
-    )
-    asks_price = bool(
-        re.search(r"сколько\s+стоит|стоимость|цена|по\s+какой\s+цене", lowered)
-    )
+    asks_stock = _asks_stock_question(question)
+    asks_price = _asks_price_question(question)
     asks_order = bool(
         re.search(
             r"\b(?:оформи|создай|сформируй)\s+заказ\b|\bзакажи\s+\d+\b",
@@ -410,7 +838,9 @@ def _fallback_tool_request(
     )
 
     if re.search(r"снят\w*\s+с\s+производств", lowered) or re.search(
-        r"чаще\s+всего|наиболее\s+част|по\s+статистик", lowered
+        r"чаще\s+всего|наиболее\s+част|больше\s+всего|"
+        r"наибольш\w*|максимальн\w*|по\s+статистик|частот\w*",
+        lowered,
     ):
         if not any(step.tool == "summarize_topic" for step in steps):
             return "summarize_topic", {"question": question}
@@ -423,11 +853,20 @@ def _fallback_tool_request(
             if _blocked_order_answer(question, steps, part_id, warehouse):
                 return None
             requested = _extract_explicit_quantity(question)
-            if requested is not None and not stock.get("error"):
+            models = [
+                code for code in codes
+                if code_type(code) == "Model"
+            ]
+            if (
+                requested is not None
+                and not stock.get("error")
+                and len(models) == 1
+            ):
                 return "create_service_order", {
                     "part_id": part_id,
                     "warehouse": warehouse,
                     "qty": requested,
+                    "model": models[0],
                 }
 
         if asks_stock and warehouse:
@@ -452,22 +891,28 @@ def _fallback_tool_request(
     if any(step.tool == "search_knowledge" for step in steps):
         return None
 
-    needs_knowledge = any(
-        code_type(code) in {"Model", "ErrorCode", "Procedure"} for code in codes
-    ) or bool(
-        re.search(
-            r"ошибк\w*|регламент\w*|модел\w*|узел\w*|компонент\w*|"
-            r"детал\w*|поставщик\w*|поставля\w*|в\s+каких\s+моделях",
-            lowered,
+    explicit_part_lookup = (
+        len(part_codes) == 1
+        and not any(code_type(code) in {"Model", "ErrorCode"} for code in codes)
+        and (asks_stock or asks_price)
+    )
+    needs_knowledge = not explicit_part_lookup and (
+        any(
+            code_type(code) in {"Model", "ErrorCode", "Procedure"}
+            for code in codes
+        )
+        or bool(
+            re.search(
+                r"ошибк\w*|регламент\w*|модел\w*|узел\w*|компонент\w*|"
+                r"детал\w*|поставщик\w*|поставля\w*|в\s+каких\s+моделях",
+                lowered,
+            )
         )
     )
     if needs_knowledge:
         return "search_knowledge", {"question": question}
 
-    # Не повторяем запрос к ERP, если нужный инструмент уже вызывался.
-    # В частности, get_price и check_stock выше проверяются с учётом аргументов.
     return None
-
 
 def _extract_warehouse(question: str) -> str | None:
     """Совместимое имя для извлечения склада в цикле агента."""
@@ -517,32 +962,7 @@ def run_agent(
 ) -> AgentResult:
     """Ведёт цикл агента с проверкой фактов и безопасным созданием заказов."""
     messages = [
-        {
-            "role": "system",
-            "content": (
-                "Ты ассистент сервисной службы. Используй инструменты для "
-                "получения фактов. Не выдумывай коды деталей, цены, остатки "
-                "и результаты заказов. Номер детали должен быть подтверждён "
-                "вопросом или результатом предыдущего инструмента. "
-                "Если вопрос содержит модель, код ошибки, регламент, деталь, "
-                "узел или поставщика, сначала используй search_knowledge. "
-                "Для вопросов о цене используй get_price, для остатков "
-                "на конкретном складе — check_stock. Если пользователь просит "
-                "оформить заказ, сначала найди нужную деталь и проверь её "
-                "остаток и статус производства. "
-                "Количество заказа должно быть явно указано пользователем. "
-                "Не создавай заказ без явного подтверждения пользователя. "
-                "Если ERP недоступна, сообщи об этом и не подменяй отсутствие "
-                "данных нулевым остатком. "
-                "В результате check_stock поля qty и discontinued независимы: "
-                "qty — фактический остаток, discontinued — статус производства. "
-                "Если qty больше нуля, нельзя утверждать, что детали нет на складе. "
-                "Если discontinued=true, не оформляй заказ на эту деталь, "
-                "даже если qty больше нуля. "
-                "Не утверждай, что заказ создан, пока create_service_order "
-                "не вернул успешный результат с номером заказа."
-            ),
-        },
+        {"role": "system", "content": AGENT_SYSTEM_PROMPT},
         {"role": "user", "content": question},
     ]
 
@@ -586,7 +1006,26 @@ def run_agent(
                         sources=sorted(sources),
                     )
 
-        response = llm.chat(messages, tools=TOOL_SCHEMAS)
+        response = llm.chat(
+            messages,
+            tools=_available_tool_schemas(question, steps),
+        )
+
+        stock_answer = _stock_answer_if_ignored(
+            question,
+            response.content,
+            steps,
+            search_requested=any(
+                call.name == "search_knowledge"
+                for call in response.tool_calls
+            ),
+        )
+        if stock_answer is not None:
+            return AgentResult(
+                answer=stock_answer,
+                steps=steps,
+                sources=sorted(sources),
+            )
 
         if not response.tool_calls:
             fallback = (
@@ -632,16 +1071,15 @@ def run_agent(
                         )
 
                     if not confirm:
-                        pending_result = {"status": "pending_confirmation"}
-                        steps.append(
-                            ToolStep(
-                                tool=fallback_name,
-                                args=dict(fallback_args),
-                                result=pending_result,
-                            )
-                        )
                         return AgentResult(
-                            answer="Заказ подготовлен и ожидает подтверждения пользователя.",
+                            answer=(
+                                f"Подготовлен заказ на деталь {fallback_args.get('part_id')} "
+                                f"для модели "
+                                f"{fallback_args.get('model')} на складе "
+                                f"{fallback_args.get('warehouse')}. "
+                                "Количество соответствует запросу пользователя. "
+                                "Заказ ожидает подтверждения и пока не создан."
+                            ),
                             steps=steps,
                             sources=sorted(sources),
                             needs_confirmation=True,
@@ -688,7 +1126,13 @@ def run_agent(
                     sources,
                 )
 
-                known_codes.update(_tool_result_codes(fallback_result))
+                known_codes.update(
+                    _tool_result_codes(
+                        fallback_result,
+                        tool_name=fallback_name,
+                        question=question,
+                    )
+                )
                 serialized_result = json.dumps(
                     fallback_result,
                     ensure_ascii=False,
@@ -728,6 +1172,30 @@ def run_agent(
                             sources=sorted(sources),
                             refused=True,
                         )
+                    if fallback_name in {"search_knowledge", "summarize_topic"}:
+                        answer_text = str(fallback_result.get("answer", ""))
+                        requires_erp = (
+                            _asks_stock_question(question)
+                            or _asks_price_question(question)
+                            or _asks_for_order(question)
+                        )
+                        violations = _validate_answer(
+                            answer_text,
+                            known_codes=known_codes,
+                            known_prices=known_prices,
+                            known_stocks=known_stocks,
+                        )
+                        if (
+                            not requires_erp
+                            and answer_text
+                            and not _has_unsupported_facts(violations)
+                        ):
+                            return AgentResult(
+                                answer=answer_text,
+                                steps=steps,
+                                sources=sorted(sources),
+                                refused=False,
+                            )
 
                 # Если пользователь просит оформить заказ, не продолжаем
                 # после обнаружения снятой с производства детали.
@@ -775,32 +1243,31 @@ def run_agent(
             )
 
             if _has_unsupported_facts(violations):
-                history = json.dumps(messages, ensure_ascii=False, default=str)
+                history = _compact_tool_history(steps)
                 correction = llm.chat(
                     [
                         {
                             "role": "system",
                             "content": (
-                                "Исправь ответ, используя только вопрос и "
-                                "результаты вызовов инструментов. Удали все "
-                                "неподтверждённые коды деталей, цены и остатки. "
-                                "Не заменяй их догадками. Если данных недостаточно, "
-                                "прямо сообщи об этом."
+                                "Исправь ответ, используя только вопрос и результаты "
+                                "вызовов инструментов. Удали все неподтверждённые коды "
+                                "деталей, цены и остатки. Не заменяй их догадками. "
+                                "Если данных недостаточно, прямо сообщи об этом."
                             ),
                         },
                         {
                             "role": "user",
                             "content": (
                                 f"Вопрос: {question}\n"
-                                "История: "
-                                f"{history}"
-                                "\n"
+                                "Результаты инструментов:\n"
+                                f"{history}\n"
                                 f"Неподтверждённые сведения: "
                                 f"{json.dumps(violations, ensure_ascii=False)}\n"
                                 f"Ответ, который нужно исправить: {answer}"
                             ),
                         },
-                    ]
+                    ],
+                    max_tokens=384,
                 )
                 answer = correction.content.strip()
 
@@ -857,6 +1324,21 @@ def run_agent(
             args = raw_args if isinstance(raw_args, dict) else {"_raw": str(raw_args)}
             step_args = dict(args)
 
+            if name in {"search_knowledge", "summarize_topic"} and any(
+                previous.tool == name for previous in steps
+            ):
+                result = {
+                    "error": (
+                        f"Инструмент {name} уже выполнялся. "
+                        "Используй полученный результат вместо повторного поиска."
+                    )
+                }
+                steps.append(
+                    ToolStep(tool=name, args=step_args, error=result["error"])
+                )
+                messages.append(tool_message(call, result))
+                continue
+
             if name not in tools:
                 result = {"error": f"Неизвестный инструмент: {name}"}
                 steps.append(ToolStep(tool=name, args=step_args, error=result["error"]))
@@ -868,6 +1350,12 @@ def run_agent(
                 steps.append(ToolStep(tool=name, args=step_args, error=result["error"]))
                 messages.append(tool_message(call, result))
                 continue
+
+            if name in {"search_knowledge", "summarize_topic"}:
+                # Не даём LLM потерять смысл отношения или ограничения при
+                # переформулировке. Сохраняем полный исходный вопрос.
+                args = {**args, "question": question}
+                step_args = dict(args)
 
             part_id = args.get("part_id")
             if part_id is not None:
@@ -940,17 +1428,12 @@ def run_agent(
                         )
 
                 if not confirm:
-                    pending_result = {"status": "pending_confirmation"}
-                    steps.append(
-                        ToolStep(
-                            tool=name,
-                            args=step_args,
-                            result=pending_result,
-                        )
-                    )
                     return AgentResult(
                         answer=(
-                            "Заказ подготовлен и ожидает подтверждения пользователя."
+                            f"Подготовлен заказ на деталь {args.get('part_id')} "
+                            f"для модели {args.get('model')} "
+                            f"на складе {args.get('warehouse')}. "
+                            "Заказ ожидает подтверждения и пока не создан."
                         ),
                         steps=steps,
                         sources=sorted(sources),
@@ -1010,7 +1493,13 @@ def run_agent(
             messages.append(tool_message(call, result))
 
             # Коды подтверждаются любым предыдущим результатом инструмента.
-            known_codes.update(_tool_result_codes(result))
+            known_codes.update(
+                _tool_result_codes(
+                    result,
+                    tool_name=name,
+                    question=question,
+                )
+            )
             serialized_result = json.dumps(result, ensure_ascii=False, default=str)
             known_prices.update(_extract_price_values(serialized_result))
             known_stocks.update(_extract_stock_values(serialized_result))
@@ -1020,6 +1509,54 @@ def run_agent(
                 if isinstance(tool_sources, list):
                     sources.update(str(source) for source in tool_sources)
                 knowledge_refused = knowledge_refused or bool(result.get("refused"))
+
+                if name in {"search_knowledge", "summarize_topic"} and not result.get("refused"):
+                    answer_text = str(result.get("answer", ""))
+                    requires_erp = (
+                        _asks_stock_question(question)
+                        or _asks_price_question(question)
+                        or _asks_for_order(question)
+                    )
+                    violations = _validate_answer(
+                        answer_text,
+                        known_codes=known_codes,
+                        known_prices=known_prices,
+                        known_stocks=known_stocks,
+                    )
+                    if (
+                        not requires_erp
+                        and answer_text
+                        and not _has_unsupported_facts(violations)
+                    ):
+                        # Инструмент уже вернул законченный ответ. Не запускаем
+                        # повторную генерацию, если ERP-цепочка не требуется.
+                        return AgentResult(
+                            answer=answer_text,
+                            steps=steps,
+                            sources=sorted(sources),
+                            refused=False,
+                        )
+
+                # Отказ поиска — конечный результат. Повторный поиск не добавит
+                # информации и раньше приводил к исчерпанию лимита шагов.
+                if result.get("refused") or (
+                    name == "search_knowledge"
+                    and isinstance(result.get("answer"), str)
+                    and re.search(
+                        r"в базе знаний не найдено|недостаточно данных",
+                        result["answer"],
+                        re.IGNORECASE,
+                    )
+                ):
+                    refusal_text = result.get("answer") or result.get("error") or (
+                        "В базе знаний не найдено достаточно информации."
+                    )
+                    return AgentResult(
+                        answer=str(refusal_text),
+                        steps=steps,
+                        sources=sorted(sources),
+                        refused=True,
+                    )
 
             if name == "get_price":
                 price = result.get("price_rub")
