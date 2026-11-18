@@ -3,7 +3,6 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .idea/
-artifacts/
 .venv/
 .env
 .DS_Store

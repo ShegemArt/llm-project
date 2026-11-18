@@ -1,0 +1,10 @@
+COMMAND: make eval-extraction
+docker compose run --rm app python -m assistant eval-extraction
+ Container llm-project-erp-1 Running 
+ Container llm-project-erp-1 Waiting 
+ Container llm-project-erp-1 Healthy 
+ Container llm-project-app-run-3c56be53190f Creating 
+ Container llm-project-app-run-3c56be53190f Created 
+извлечение: связи Precision 1.00, Recall 0.95, отброшено проверками 10
+
+EXIT_CODE=0

@@ -1,0 +1,4297 @@
+{
+  "graph": {
+    "conflicts": 0
+  },
+  "nodes": [
+    {
+      "id": "Part:P-1046",
+      "type": "Part",
+      "name": "P-1046",
+      "sources": [
+        "bulletin_SB-2025-01.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1046B",
+      "type": "Part",
+      "name": "P-1046B",
+      "sources": [
+        "bulletin_SB-2025-01.md#0"
+      ]
+    },
+    {
+      "id": "Component:вентилятор испарителя",
+      "type": "Component",
+      "name": "вентилятор испарителя",
+      "sources": [
+        "bulletin_SB-2025-01.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "procedure_SP-108.md#0",
+        "report_R-2025-005.md#0",
+        "report_R-2025-008.md#0",
+        "report_R-2025-014.md#0",
+        "report_R-2025-016.md#0",
+        "report_R-2025-017.md#0",
+        "report_R-2025-020.md#0",
+        "report_R-2025-021.md#0",
+        "report_R-2025-038.md#0"
+      ]
+    },
+    {
+      "id": "Supplier:ВентПром",
+      "type": "Supplier",
+      "name": "ВентПром",
+      "sources": [
+        "bulletin_SB-2025-01.md#0",
+        "bulletin_SB-2025-10.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1118",
+      "type": "Part",
+      "name": "P-1118",
+      "sources": [
+        "bulletin_SB-2025-02.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1118B",
+      "type": "Part",
+      "name": "P-1118B",
+      "sources": [
+        "bulletin_SB-2025-02.md#0"
+      ]
+    },
+    {
+      "id": "Component:датчик температуры",
+      "type": "Component",
+      "name": "датчик температуры",
+      "sources": [
+        "bulletin_SB-2025-02.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-105.md#0",
+        "report_R-2025-001.md#0",
+        "report_R-2025-009.md#0",
+        "report_R-2025-026.md#0",
+        "report_R-2025-027.md#0",
+        "report_R-2025-032.md#0"
+      ]
+    },
+    {
+      "id": "Supplier:ТермоПрибор",
+      "type": "Supplier",
+      "name": "ТермоПрибор",
+      "sources": [
+        "bulletin_SB-2025-02.md#0",
+        "bulletin_SB-2025-04.md#0",
+        "bulletin_SB-2025-08.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1042",
+      "type": "Part",
+      "name": "P-1042",
+      "sources": [
+        "bulletin_SB-2025-03.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1042B",
+      "type": "Part",
+      "name": "P-1042B",
+      "sources": [
+        "bulletin_SB-2025-03.md#0"
+      ]
+    },
+    {
+      "id": "Component:пусковое реле",
+      "type": "Component",
+      "name": "пусковое реле",
+      "sources": [
+        "bulletin_SB-2025-03.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "procedure_SP-104.md#0",
+        "report_R-2025-003.md#0",
+        "report_R-2025-010.md#0",
+        "report_R-2025-012.md#0",
+        "report_R-2025-023.md#0",
+        "report_R-2025-028.md#0",
+        "report_R-2025-034.md#0",
+        "report_R-2025-036.md#0",
+        "report_R-2025-037.md#0",
+        "report_R-2025-039.md#0"
+      ]
+    },
+    {
+      "id": "Supplier:ХолодКомплект",
+      "type": "Supplier",
+      "name": "ХолодКомплект",
+      "sources": [
+        "bulletin_SB-2025-03.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2054",
+      "type": "Part",
+      "name": "P-2054",
+      "sources": [
+        "bulletin_SB-2025-04.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2054B",
+      "type": "Part",
+      "name": "P-2054B",
+      "sources": [
+        "bulletin_SB-2025-04.md#0",
+        "bulletin_SB-2025-08.md#0"
+      ]
+    },
+    {
+      "id": "Component:нагреватель оттайки",
+      "type": "Component",
+      "name": "нагреватель оттайки",
+      "sources": [
+        "bulletin_SB-2025-04.md#0",
+        "bulletin_SB-2025-08.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "procedure_SP-110.md#0",
+        "report_R-2025-004.md#0",
+        "report_R-2025-024.md#0",
+        "report_R-2025-030.md#0",
+        "report_R-2025-033.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2110",
+      "type": "Part",
+      "name": "P-2110",
+      "sources": [
+        "bulletin_SB-2025-05.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2110B",
+      "type": "Part",
+      "name": "P-2110B",
+      "sources": [
+        "bulletin_SB-2025-05.md#0"
+      ]
+    },
+    {
+      "id": "Component:компрессор",
+      "type": "Component",
+      "name": "компрессор",
+      "sources": [
+        "bulletin_SB-2025-05.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-101.md#0",
+        "procedure_SP-102.md#0",
+        "report_R-2025-040.md#0"
+      ]
+    },
+    {
+      "id": "Supplier:КомпрессорМаш",
+      "type": "Supplier",
+      "name": "КомпрессорМаш",
+      "sources": [
+        "bulletin_SB-2025-05.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3062",
+      "type": "Part",
+      "name": "P-3062",
+      "sources": [
+        "bulletin_SB-2025-06.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3062B",
+      "type": "Part",
+      "name": "P-3062B",
+      "sources": [
+        "bulletin_SB-2025-06.md#0",
+        "bulletin_SB-2025-09.md#0"
+      ]
+    },
+    {
+      "id": "Component:циркуляционный насос",
+      "type": "Component",
+      "name": "циркуляционный насос",
+      "sources": [
+        "bulletin_SB-2025-06.md#0",
+        "bulletin_SB-2025-09.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-112.md#0",
+        "report_R-2025-007.md#0",
+        "report_R-2025-013.md#0",
+        "report_R-2025-015.md#0",
+        "report_R-2025-018.md#0",
+        "report_R-2025-019.md#0",
+        "report_R-2025-025.md#0",
+        "report_R-2025-029.md#0",
+        "report_R-2025-035.md#0"
+      ]
+    },
+    {
+      "id": "Supplier:ГидроТех",
+      "type": "Supplier",
+      "name": "ГидроТех",
+      "sources": [
+        "bulletin_SB-2025-06.md#0",
+        "bulletin_SB-2025-09.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3126",
+      "type": "Part",
+      "name": "P-3126",
+      "sources": [
+        "bulletin_SB-2025-07.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3126B",
+      "type": "Part",
+      "name": "P-3126B",
+      "sources": [
+        "bulletin_SB-2025-07.md#0"
+      ]
+    },
+    {
+      "id": "Component:реле давления",
+      "type": "Component",
+      "name": "реле давления",
+      "sources": [
+        "bulletin_SB-2025-07.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-107.md#0",
+        "report_R-2025-002.md#0",
+        "report_R-2025-011.md#0",
+        "report_R-2025-022.md#0",
+        "report_R-2025-031.md#0"
+      ]
+    },
+    {
+      "id": "Supplier:АвтоматикаСевер",
+      "type": "Supplier",
+      "name": "АвтоматикаСевер",
+      "sources": [
+        "bulletin_SB-2025-07.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2054C",
+      "type": "Part",
+      "name": "P-2054C",
+      "sources": [
+        "bulletin_SB-2025-08.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3062C",
+      "type": "Part",
+      "name": "P-3062C",
+      "sources": [
+        "bulletin_SB-2025-09.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1014",
+      "type": "Part",
+      "name": "P-1014",
+      "sources": [
+        "bulletin_SB-2025-10.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Component:вентилятор конденсатора",
+      "type": "Component",
+      "name": "вентилятор конденсатора",
+      "sources": [
+        "bulletin_SB-2025-10.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-103.md#0"
+      ]
+    },
+    {
+      "id": "Model:AR-210",
+      "type": "Model",
+      "name": "AR-210",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "report_R-2025-012.md#0",
+        "report_R-2025-027.md#0",
+        "report_R-2025-028.md#0"
+      ]
+    },
+    {
+      "id": "ProductLine:Арктика",
+      "type": "ProductLine",
+      "name": "Арктика",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Component:контроллер",
+      "type": "Component",
+      "name": "контроллер",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-106.md#0",
+        "procedure_SP-114.md#0",
+        "report_R-2025-006.md#0"
+      ]
+    },
+    {
+      "id": "Component:блок освещения",
+      "type": "Component",
+      "name": "блок освещения",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "procedure_SP-109.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1010",
+      "type": "Part",
+      "name": "P-1010",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1018",
+      "type": "Part",
+      "name": "P-1018",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1022",
+      "type": "Part",
+      "name": "P-1022",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1026",
+      "type": "Part",
+      "name": "P-1026",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1050",
+      "type": "Part",
+      "name": "P-1050",
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-11",
+      "type": "ErrorCode",
+      "name": "E-11",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-101.md#0",
+        "report_R-2025-040.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-12",
+      "type": "ErrorCode",
+      "name": "E-12",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-102.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-13",
+      "type": "ErrorCode",
+      "name": "E-13",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-103.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-14",
+      "type": "ErrorCode",
+      "name": "E-14",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-105.md#0",
+        "report_R-2025-001.md#0",
+        "report_R-2025-009.md#0",
+        "report_R-2025-026.md#0",
+        "report_R-2025-027.md#0",
+        "report_R-2025-032.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-15",
+      "type": "ErrorCode",
+      "name": "E-15",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-106.md#0",
+        "report_R-2025-006.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-16",
+      "type": "ErrorCode",
+      "name": "E-16",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-107.md#0",
+        "report_R-2025-002.md#0",
+        "report_R-2025-011.md#0",
+        "report_R-2025-022.md#0",
+        "report_R-2025-031.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-17",
+      "type": "ErrorCode",
+      "name": "E-17",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "procedure_SP-104.md#0",
+        "report_R-2025-003.md#0",
+        "report_R-2025-010.md#0",
+        "report_R-2025-012.md#0",
+        "report_R-2025-023.md#0",
+        "report_R-2025-028.md#0",
+        "report_R-2025-034.md#0",
+        "report_R-2025-036.md#0",
+        "report_R-2025-037.md#0",
+        "report_R-2025-039.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-18",
+      "type": "ErrorCode",
+      "name": "E-18",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "procedure_SP-108.md#0",
+        "report_R-2025-005.md#0",
+        "report_R-2025-008.md#0",
+        "report_R-2025-014.md#0",
+        "report_R-2025-016.md#0",
+        "report_R-2025-017.md#0",
+        "report_R-2025-020.md#0",
+        "report_R-2025-021.md#0",
+        "report_R-2025-038.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-19",
+      "type": "ErrorCode",
+      "name": "E-19",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "procedure_SP-109.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-24",
+      "type": "ErrorCode",
+      "name": "E-24",
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-114.md#0"
+      ]
+    },
+    {
+      "id": "Model:AR-220",
+      "type": "Model",
+      "name": "AR-220",
+      "sources": [
+        "manual_AR-220.md#0",
+        "manual_AR-220.md#1",
+        "report_R-2025-001.md#0",
+        "report_R-2025-036.md#0",
+        "report_R-2025-037.md#0"
+      ]
+    },
+    {
+      "id": "Model:AR-310",
+      "type": "Model",
+      "name": "AR-310",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-310.md#1",
+        "report_R-2025-006.md#0",
+        "report_R-2025-009.md#0",
+        "report_R-2025-023.md#0",
+        "report_R-2025-034.md#0",
+        "report_R-2025-039.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1110",
+      "type": "Part",
+      "name": "P-1110",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1114",
+      "type": "Part",
+      "name": "P-1114",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1122",
+      "type": "Part",
+      "name": "P-1122",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1126",
+      "type": "Part",
+      "name": "P-1126",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1142",
+      "type": "Part",
+      "name": "P-1142",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1146",
+      "type": "Part",
+      "name": "P-1146",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-1150",
+      "type": "Part",
+      "name": "P-1150",
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "id": "Model:AR-320",
+      "type": "Model",
+      "name": "AR-320",
+      "sources": [
+        "manual_AR-320.md#0",
+        "manual_AR-320.md#1",
+        "report_R-2025-003.md#0",
+        "report_R-2025-010.md#0",
+        "report_R-2025-026.md#0"
+      ]
+    },
+    {
+      "id": "Model:BZ-110",
+      "type": "Model",
+      "name": "BZ-110",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "report_R-2025-005.md#0",
+        "report_R-2025-014.md#0",
+        "report_R-2025-030.md#0"
+      ]
+    },
+    {
+      "id": "ProductLine:Бриз",
+      "type": "ProductLine",
+      "name": "Бриз",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Component:терморегулирующий вентиль",
+      "type": "Component",
+      "name": "терморегулирующий вентиль",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-111.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2010",
+      "type": "Part",
+      "name": "P-2010",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2014",
+      "type": "Part",
+      "name": "P-2014",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2018",
+      "type": "Part",
+      "name": "P-2018",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2022",
+      "type": "Part",
+      "name": "P-2022",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2026",
+      "type": "Part",
+      "name": "P-2026",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2046",
+      "type": "Part",
+      "name": "P-2046",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2058",
+      "type": "Part",
+      "name": "P-2058",
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-20",
+      "type": "ErrorCode",
+      "name": "E-20",
+      "sources": [
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "procedure_SP-110.md#0",
+        "report_R-2025-004.md#0",
+        "report_R-2025-024.md#0",
+        "report_R-2025-030.md#0",
+        "report_R-2025-033.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-21",
+      "type": "ErrorCode",
+      "name": "E-21",
+      "sources": [
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-111.md#0"
+      ]
+    },
+    {
+      "id": "Model:BZ-120",
+      "type": "Model",
+      "name": "BZ-120",
+      "sources": [
+        "manual_BZ-120.md#0",
+        "manual_BZ-120.md#1",
+        "report_R-2025-004.md#0",
+        "report_R-2025-016.md#0",
+        "report_R-2025-021.md#0",
+        "report_R-2025-040.md#0"
+      ]
+    },
+    {
+      "id": "Model:BZ-210",
+      "type": "Model",
+      "name": "BZ-210",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-210.md#1",
+        "report_R-2025-008.md#0",
+        "report_R-2025-017.md#0",
+        "report_R-2025-033.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2114",
+      "type": "Part",
+      "name": "P-2114",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2118",
+      "type": "Part",
+      "name": "P-2118",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2122",
+      "type": "Part",
+      "name": "P-2122",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2126",
+      "type": "Part",
+      "name": "P-2126",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2146",
+      "type": "Part",
+      "name": "P-2146",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2154",
+      "type": "Part",
+      "name": "P-2154",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-2158",
+      "type": "Part",
+      "name": "P-2158",
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "id": "Model:BZ-220",
+      "type": "Model",
+      "name": "BZ-220",
+      "sources": [
+        "manual_BZ-220.md#0",
+        "manual_BZ-220.md#1",
+        "report_R-2025-020.md#0",
+        "report_R-2025-024.md#0",
+        "report_R-2025-038.md#0"
+      ]
+    },
+    {
+      "id": "Model:GS-410",
+      "type": "Model",
+      "name": "GS-410",
+      "sources": [
+        "manual_GS-410.md#0",
+        "report_R-2025-013.md#0",
+        "report_R-2025-019.md#0",
+        "report_R-2025-031.md#0"
+      ]
+    },
+    {
+      "id": "ProductLine:Гольфстрим",
+      "type": "ProductLine",
+      "name": "Гольфстрим",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Component:реле протока",
+      "type": "Component",
+      "name": "реле протока",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#0",
+        "manual_GS-520.md#1",
+        "procedure_SP-113.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3010",
+      "type": "Part",
+      "name": "P-3010",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3014",
+      "type": "Part",
+      "name": "P-3014",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3018",
+      "type": "Part",
+      "name": "P-3018",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3022",
+      "type": "Part",
+      "name": "P-3022",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3026",
+      "type": "Part",
+      "name": "P-3026",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3058",
+      "type": "Part",
+      "name": "P-3058",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3066",
+      "type": "Part",
+      "name": "P-3066",
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-22",
+      "type": "ErrorCode",
+      "name": "E-22",
+      "sources": [
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-112.md#0",
+        "report_R-2025-007.md#0",
+        "report_R-2025-013.md#0",
+        "report_R-2025-015.md#0",
+        "report_R-2025-018.md#0",
+        "report_R-2025-019.md#0",
+        "report_R-2025-025.md#0",
+        "report_R-2025-035.md#0"
+      ]
+    },
+    {
+      "id": "ErrorCode:E-23",
+      "type": "ErrorCode",
+      "name": "E-23",
+      "sources": [
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-113.md#0"
+      ]
+    },
+    {
+      "id": "Model:GS-420",
+      "type": "Model",
+      "name": "GS-420",
+      "sources": [
+        "manual_GS-420.md#0",
+        "manual_GS-420.md#1",
+        "report_R-2025-007.md#0",
+        "report_R-2025-018.md#0",
+        "report_R-2025-022.md#0"
+      ]
+    },
+    {
+      "id": "Model:GS-510",
+      "type": "Model",
+      "name": "GS-510",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-510.md#1",
+        "report_R-2025-002.md#0",
+        "report_R-2025-029.md#0",
+        "report_R-2025-032.md#0",
+        "report_R-2025-035.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3110",
+      "type": "Part",
+      "name": "P-3110",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3114",
+      "type": "Part",
+      "name": "P-3114",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3118",
+      "type": "Part",
+      "name": "P-3118",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3122",
+      "type": "Part",
+      "name": "P-3122",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3162",
+      "type": "Part",
+      "name": "P-3162",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3158",
+      "type": "Part",
+      "name": "P-3158",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Part:P-3166",
+      "type": "Part",
+      "name": "P-3166",
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "id": "Model:GS-520",
+      "type": "Model",
+      "name": "GS-520",
+      "sources": [
+        "manual_GS-520.md#0",
+        "report_R-2025-011.md#0",
+        "report_R-2025-015.md#0",
+        "report_R-2025-025.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-101",
+      "type": "Procedure",
+      "name": "SP-101",
+      "sources": [
+        "procedure_SP-101.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-102",
+      "type": "Procedure",
+      "name": "SP-102",
+      "sources": [
+        "procedure_SP-102.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-103",
+      "type": "Procedure",
+      "name": "SP-103",
+      "sources": [
+        "procedure_SP-103.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-104",
+      "type": "Procedure",
+      "name": "SP-104",
+      "sources": [
+        "procedure_SP-104.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-105",
+      "type": "Procedure",
+      "name": "SP-105",
+      "sources": [
+        "procedure_SP-105.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-106",
+      "type": "Procedure",
+      "name": "SP-106",
+      "sources": [
+        "procedure_SP-106.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-107",
+      "type": "Procedure",
+      "name": "SP-107",
+      "sources": [
+        "procedure_SP-107.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-108",
+      "type": "Procedure",
+      "name": "SP-108",
+      "sources": [
+        "procedure_SP-108.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-109",
+      "type": "Procedure",
+      "name": "SP-109",
+      "sources": [
+        "procedure_SP-109.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-110",
+      "type": "Procedure",
+      "name": "SP-110",
+      "sources": [
+        "procedure_SP-110.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-111",
+      "type": "Procedure",
+      "name": "SP-111",
+      "sources": [
+        "procedure_SP-111.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-112",
+      "type": "Procedure",
+      "name": "SP-112",
+      "sources": [
+        "procedure_SP-112.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-113",
+      "type": "Procedure",
+      "name": "SP-113",
+      "sources": [
+        "procedure_SP-113.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-114",
+      "type": "Procedure",
+      "name": "SP-114",
+      "sources": [
+        "procedure_SP-114.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-115",
+      "type": "Procedure",
+      "name": "SP-115",
+      "sources": [
+        "procedure_SP-115.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-116",
+      "type": "Procedure",
+      "name": "SP-116",
+      "sources": [
+        "procedure_SP-116.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-117",
+      "type": "Procedure",
+      "name": "SP-117",
+      "sources": [
+        "procedure_SP-117.md#0"
+      ]
+    },
+    {
+      "id": "Procedure:SP-118",
+      "type": "Procedure",
+      "name": "SP-118",
+      "sources": [
+        "procedure_SP-118.md#0"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "Part:P-1046",
+      "target": "Component:вентилятор испарителя",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-01.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1046",
+      "target": "Part:P-1046B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-01.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1046",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1046B",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-01.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1118",
+      "target": "Component:датчик температуры",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-02.md#0",
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1118",
+      "target": "Part:P-1118B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-02.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1118",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1118B",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-02.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1042",
+      "target": "Component:пусковое реле",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-03.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1042",
+      "target": "Part:P-1042B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-03.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1042",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1042B",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-03.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054",
+      "target": "Component:нагреватель оттайки",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-04.md#0",
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054",
+      "target": "Part:P-2054B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-04.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054B",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-04.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054B",
+      "target": "Component:нагреватель оттайки",
+      "type": "IS_A",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-08.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054B",
+      "target": "Part:P-2054C",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-08.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2110",
+      "target": "Component:компрессор",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-05.md#0",
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2110",
+      "target": "Part:P-2110B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-05.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2110",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2110B",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-05.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062",
+      "target": "Component:циркуляционный насос",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-06.md#0",
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062",
+      "target": "Part:P-3062B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-06.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062",
+      "target": "Supplier:ГидроТех",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062B",
+      "target": "Supplier:ГидроТех",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-06.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062B",
+      "target": "Component:циркуляционный насос",
+      "type": "IS_A",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-09.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062B",
+      "target": "Part:P-3062C",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-09.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3126",
+      "target": "Component:реле давления",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-07.md#0",
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3126",
+      "target": "Part:P-3126B",
+      "type": "REPLACED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-07.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3126",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3126B",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-07.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2054C",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-08.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3062C",
+      "target": "Supplier:ГидроТех",
+      "type": "SUPPLIED_BY",
+      "weight": 1,
+      "sources": [
+        "bulletin_SB-2025-09.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1014",
+      "target": "Component:вентилятор конденсатора",
+      "type": "IS_A",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-10.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1014",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 3,
+      "sources": [
+        "bulletin_SB-2025-10.md#0",
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "ProductLine:Арктика",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1010",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1014",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1018",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1022",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1026",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1042",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1046",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Part:P-1050",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Component:пусковое реле",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-012.md#0",
+        "report_R-2025-028.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-210",
+      "target": "Component:датчик температуры",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-027.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1010",
+      "target": "Component:компрессор",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1010",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1018",
+      "target": "Component:датчик температуры",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1018",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1022",
+      "target": "Component:контроллер",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1022",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1026",
+      "target": "Component:реле давления",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1026",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1050",
+      "target": "Component:блок освещения",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1050",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-210.md#0",
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-11",
+      "target": "Component:компрессор",
+      "type": "INDICATES",
+      "weight": 14,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-101.md#0",
+        "report_R-2025-040.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-11",
+      "target": "Procedure:SP-101",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-101.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-12",
+      "target": "Component:компрессор",
+      "type": "INDICATES",
+      "weight": 13,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-102.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-12",
+      "target": "Procedure:SP-102",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-102.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-13",
+      "target": "Component:вентилятор конденсатора",
+      "type": "INDICATES",
+      "weight": 13,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-103.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-13",
+      "target": "Procedure:SP-103",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-103.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-14",
+      "target": "Component:датчик температуры",
+      "type": "INDICATES",
+      "weight": 18,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-105.md#0",
+        "report_R-2025-001.md#0",
+        "report_R-2025-009.md#0",
+        "report_R-2025-026.md#0",
+        "report_R-2025-027.md#0",
+        "report_R-2025-032.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-14",
+      "target": "Procedure:SP-105",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-105.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-15",
+      "target": "Component:контроллер",
+      "type": "INDICATES",
+      "weight": 14,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-106.md#0",
+        "report_R-2025-006.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-15",
+      "target": "Procedure:SP-106",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-106.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-16",
+      "target": "Component:реле давления",
+      "type": "INDICATES",
+      "weight": 17,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-107.md#0",
+        "report_R-2025-002.md#0",
+        "report_R-2025-011.md#0",
+        "report_R-2025-022.md#0",
+        "report_R-2025-031.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-16",
+      "target": "Procedure:SP-107",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-107.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-17",
+      "target": "Component:пусковое реле",
+      "type": "INDICATES",
+      "weight": 13,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "procedure_SP-104.md#0",
+        "report_R-2025-010.md#0",
+        "report_R-2025-012.md#0",
+        "report_R-2025-023.md#0",
+        "report_R-2025-028.md#0",
+        "report_R-2025-034.md#0",
+        "report_R-2025-036.md#0",
+        "report_R-2025-037.md#0",
+        "report_R-2025-039.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-17",
+      "target": "Procedure:SP-104",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-104.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-18",
+      "target": "Component:вентилятор испарителя",
+      "type": "INDICATES",
+      "weight": 17,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "procedure_SP-108.md#0",
+        "report_R-2025-005.md#0",
+        "report_R-2025-008.md#0",
+        "report_R-2025-014.md#0",
+        "report_R-2025-016.md#0",
+        "report_R-2025-017.md#0",
+        "report_R-2025-020.md#0",
+        "report_R-2025-021.md#0",
+        "report_R-2025-038.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-18",
+      "target": "Procedure:SP-108",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-108.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-19",
+      "target": "Component:блок освещения",
+      "type": "INDICATES",
+      "weight": 5,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "procedure_SP-109.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-19",
+      "target": "Procedure:SP-109",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-109.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-24",
+      "target": "Component:контроллер",
+      "type": "INDICATES",
+      "weight": 13,
+      "sources": [
+        "manual_AR-210.md#1",
+        "manual_AR-220.md#1",
+        "manual_AR-310.md#1",
+        "manual_AR-320.md#1",
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-114.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-24",
+      "target": "Procedure:SP-114",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-114.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "ProductLine:Арктика",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1010",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1014",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1018",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1022",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1026",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1042",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1046",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Part:P-1050",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Component:датчик температуры",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-001.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-220",
+      "target": "Component:пусковое реле",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-036.md#0",
+        "report_R-2025-037.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-310",
+      "target": "ProductLine:Арктика",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_AR-310.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-310",
+      "target": "Component:контроллер",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-006.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-310",
+      "target": "Component:датчик температуры",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-009.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-310",
+      "target": "Component:пусковое реле",
+      "type": "FAILED",
+      "weight": 3,
+      "sources": [
+        "report_R-2025-023.md#0",
+        "report_R-2025-034.md#0",
+        "report_R-2025-039.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1110",
+      "target": "Component:компрессор",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1110",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1114",
+      "target": "Component:вентилятор конденсатора",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1114",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1122",
+      "target": "Component:контроллер",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1122",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1126",
+      "target": "Component:реле давления",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1126",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1142",
+      "target": "Component:пусковое реле",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1142",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1146",
+      "target": "Component:вентилятор испарителя",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1146",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1150",
+      "target": "Component:блок освещения",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-1150",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_AR-310.md#0",
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "ProductLine:Арктика",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1110",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1114",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1118",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1122",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1126",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1142",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1146",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Part:P-1150",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_AR-320.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Component:пусковое реле",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-003.md#0",
+        "report_R-2025-010.md#0"
+      ]
+    },
+    {
+      "source": "Model:AR-320",
+      "target": "Component:датчик температуры",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-026.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "ProductLine:Бриз",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2010",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2014",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2018",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2022",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2026",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2046",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2054",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Part:P-2058",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-110.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Component:вентилятор испарителя",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-005.md#0",
+        "report_R-2025-014.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-110",
+      "target": "Component:нагреватель оттайки",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-030.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2010",
+      "target": "Component:компрессор",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2010",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2014",
+      "target": "Component:вентилятор конденсатора",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2014",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2018",
+      "target": "Component:датчик температуры",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2018",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2022",
+      "target": "Component:контроллер",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2022",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2026",
+      "target": "Component:реле давления",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2026",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2046",
+      "target": "Component:вентилятор испарителя",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2046",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2058",
+      "target": "Component:терморегулирующий вентиль",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2058",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-110.md#0",
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-20",
+      "target": "Component:нагреватель оттайки",
+      "type": "INDICATES",
+      "weight": 9,
+      "sources": [
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "procedure_SP-110.md#0",
+        "report_R-2025-004.md#0",
+        "report_R-2025-024.md#0",
+        "report_R-2025-030.md#0",
+        "report_R-2025-033.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-20",
+      "target": "Procedure:SP-110",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-110.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-21",
+      "target": "Component:терморегулирующий вентиль",
+      "type": "INDICATES",
+      "weight": 9,
+      "sources": [
+        "manual_BZ-110.md#1",
+        "manual_BZ-120.md#1",
+        "manual_BZ-210.md#1",
+        "manual_BZ-220.md#1",
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-111.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-21",
+      "target": "Procedure:SP-111",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-111.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "ProductLine:Бриз",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2010",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2014",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2018",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2022",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2026",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2046",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2054",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Part:P-2058",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-120.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Component:нагреватель оттайки",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-004.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Component:вентилятор испарителя",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-016.md#0",
+        "report_R-2025-021.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-120",
+      "target": "Component:компрессор",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-040.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "ProductLine:Бриз",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2110",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2114",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2118",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2122",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2126",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2146",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2154",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Part:P-2158",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-210.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Component:вентилятор испарителя",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-008.md#0",
+        "report_R-2025-017.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-210",
+      "target": "Component:нагреватель оттайки",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-033.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2114",
+      "target": "Component:вентилятор конденсатора",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2114",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2118",
+      "target": "Component:датчик температуры",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2118",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2122",
+      "target": "Component:контроллер",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2122",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2126",
+      "target": "Component:реле давления",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2126",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2146",
+      "target": "Component:вентилятор испарителя",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2146",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2154",
+      "target": "Component:нагреватель оттайки",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2154",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2158",
+      "target": "Component:терморегулирующий вентиль",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-2158",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_BZ-210.md#0",
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "ProductLine:Бриз",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2110",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2114",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2118",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2122",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2126",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2146",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2154",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Part:P-2158",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_BZ-220.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Component:вентилятор испарителя",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-020.md#0",
+        "report_R-2025-038.md#0"
+      ]
+    },
+    {
+      "source": "Model:BZ-220",
+      "target": "Component:нагреватель оттайки",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-024.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "ProductLine:Гольфстрим",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3010",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3014",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3018",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3022",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3026",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3062",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3058",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Part:P-3066",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-410.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Component:циркуляционный насос",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-013.md#0",
+        "report_R-2025-019.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-410",
+      "target": "Component:реле давления",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-031.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3010",
+      "target": "Component:компрессор",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3010",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3014",
+      "target": "Component:вентилятор конденсатора",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3014",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3018",
+      "target": "Component:датчик температуры",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3018",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3022",
+      "target": "Component:контроллер",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3022",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3026",
+      "target": "Component:реле давления",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3026",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3058",
+      "target": "Component:терморегулирующий вентиль",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3058",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3066",
+      "target": "Component:реле протока",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3066",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-410.md#0",
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-22",
+      "target": "Component:циркуляционный насос",
+      "type": "INDICATES",
+      "weight": 12,
+      "sources": [
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-112.md#0",
+        "report_R-2025-007.md#0",
+        "report_R-2025-013.md#0",
+        "report_R-2025-015.md#0",
+        "report_R-2025-018.md#0",
+        "report_R-2025-019.md#0",
+        "report_R-2025-025.md#0",
+        "report_R-2025-035.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-22",
+      "target": "Procedure:SP-112",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-112.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-23",
+      "target": "Component:реле протока",
+      "type": "INDICATES",
+      "weight": 5,
+      "sources": [
+        "manual_GS-410.md#1",
+        "manual_GS-420.md#1",
+        "manual_GS-510.md#1",
+        "manual_GS-520.md#1",
+        "procedure_SP-113.md#0"
+      ]
+    },
+    {
+      "source": "ErrorCode:E-23",
+      "target": "Procedure:SP-113",
+      "type": "FIXED_BY",
+      "weight": 1,
+      "sources": [
+        "procedure_SP-113.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "ProductLine:Гольфстрим",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3010",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3014",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3018",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3022",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3026",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3062",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3058",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Part:P-3066",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-420.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Component:циркуляционный насос",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-007.md#0",
+        "report_R-2025-018.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-420",
+      "target": "Component:реле давления",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-022.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "ProductLine:Гольфстрим",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3110",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3114",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3118",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3122",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3126",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3162",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3158",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Part:P-3166",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Component:компрессор",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "manual_GS-510.md#1"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Component:реле давления",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-002.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Component:циркуляционный насос",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-029.md#0",
+        "report_R-2025-035.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-510",
+      "target": "Component:датчик температуры",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-032.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3110",
+      "target": "Component:компрессор",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3110",
+      "target": "Supplier:КомпрессорМаш",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3114",
+      "target": "Component:вентилятор конденсатора",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3114",
+      "target": "Supplier:ВентПром",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3118",
+      "target": "Component:датчик температуры",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3118",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3122",
+      "target": "Component:контроллер",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3122",
+      "target": "Supplier:АвтоматикаСевер",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3162",
+      "target": "Component:циркуляционный насос",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3162",
+      "target": "Supplier:ГидроТех",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3158",
+      "target": "Component:терморегулирующий вентиль",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3158",
+      "target": "Supplier:ТермоПрибор",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3166",
+      "target": "Component:реле протока",
+      "type": "IS_A",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Part:P-3166",
+      "target": "Supplier:ХолодКомплект",
+      "type": "SUPPLIED_BY",
+      "weight": 2,
+      "sources": [
+        "manual_GS-510.md#0",
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "ProductLine:Гольфстрим",
+      "type": "BELONGS_TO",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3110",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3114",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3118",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3122",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3126",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3162",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3158",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Part:P-3166",
+      "type": "HAS_PART",
+      "weight": 1,
+      "sources": [
+        "manual_GS-520.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Component:реле давления",
+      "type": "FAILED",
+      "weight": 1,
+      "sources": [
+        "report_R-2025-011.md#0"
+      ]
+    },
+    {
+      "source": "Model:GS-520",
+      "target": "Component:циркуляционный насос",
+      "type": "FAILED",
+      "weight": 2,
+      "sources": [
+        "report_R-2025-015.md#0",
+        "report_R-2025-025.md#0"
+      ]
+    }
+  ]
+}

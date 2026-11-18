@@ -1,0 +1,13 @@
+COMMAND: make eval-all
+docker compose run --rm app sh -c 'for mode in baseline local global agent; do python -m assistant eval --mode $mode || exit 1; done'
+ Container llm-project-erp-1 Running 
+ Container llm-project-erp-1 Waiting 
+ Container llm-project-erp-1 Healthy 
+ Container llm-project-app-run-90dccc513e59 Creating 
+ Container llm-project-app-run-90dccc513e59 Created 
+baseline: верных ответов 0.50 (local 1.00, multihop 0.57, global 0.00, tool 0.00, refusal 1.00), выдуманные факты 0.00, вызовов модели на вопрос 1.0
+local: верных ответов 0.75 (local 1.00, multihop 1.00, global 0.75, tool 0.00, refusal 1.00), выдуманные факты 0.04, вызовов модели на вопрос 0.7
+global: верных ответов 0.79 (local 1.00, multihop 1.00, global 1.00, tool 0.00, refusal 1.00), выдуманные факты 0.04, вызовов модели на вопрос 2.1
+agent: верных ответов 1.00 (local 1.00, multihop 1.00, global 1.00, tool 1.00, refusal 1.00), выдуманные факты 0.00, вызовов модели на вопрос 3.1
+
+EXIT_CODE=0

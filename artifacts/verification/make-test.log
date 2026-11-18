@@ -1,0 +1,12 @@
+COMMAND: make test
+docker compose run --rm app pytest -q 
+ Container llm-project-erp-1 Running 
+ Container llm-project-erp-1 Waiting 
+ Container llm-project-erp-1 Healthy 
+ Container llm-project-app-run-94ef8a6bf771 Creating 
+ Container llm-project-app-run-94ef8a6bf771 Created 
+........................................................................ [ 50%]
+......................................................................   [100%]
+142 passed in 1.27s
+
+EXIT_CODE=0

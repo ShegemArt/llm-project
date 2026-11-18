@@ -1,0 +1,7 @@
+========== VERIFICATION SUMMARY ==========
+make up:              0
+make index:           0
+make test:            0
+make lint:            0
+make eval-all:        0
+make eval-extraction: 0

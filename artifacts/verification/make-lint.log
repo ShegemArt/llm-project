@@ -1,0 +1,10 @@
+COMMAND: make lint
+docker compose run --rm app ruff check .
+ Container llm-project-erp-1 Running 
+ Container llm-project-erp-1 Waiting 
+ Container llm-project-erp-1 Healthy 
+ Container llm-project-app-run-c0166fcbf918 Creating 
+ Container llm-project-app-run-c0166fcbf918 Created 
+All checks passed!
+
+EXIT_CODE=0
