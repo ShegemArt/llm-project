@@ -12,8 +12,7 @@ def detect_communities(graph: nx.DiGraph) -> list[Community]:
     undirected = nx.Graph()
     undirected.add_nodes_from(graph.nodes)
 
-    # В исходном графе связи направлены, но для группировки
-    # важно, насколько тесно связаны узлы.
+    # Для группировки важно, насколько тесно связаны узлы.
     for u, v, data in graph.edges(data=True):
         weight = data.get("weight", 1)
         if undirected.has_edge(u, v):
@@ -41,9 +40,9 @@ def detect_communities(graph: nx.DiGraph) -> list[Community]:
 
 
 def summarize_community(
-    community: Community,
-    graph: nx.DiGraph,
-    llm: LLMClient,
+        community: Community,
+        graph: nx.DiGraph,
+        llm: LLMClient,
 ) -> str:
     """Генерирует сводку сообщества объёмом до 150 слов."""
     node_ids = set(community.nodes)
@@ -70,12 +69,11 @@ def summarize_community(
             "weight": data.get("weight", 1),
         })
 
-    # Статистику считает Python, а не языковая модель.
     relation_counts = {}
     for relation in relations:
         kind = relation["type"]
         relation_counts[kind] = (
-            relation_counts.get(kind, 0) + relation["weight"]
+                relation_counts.get(kind, 0) + relation["weight"]
         )
 
     facts = {

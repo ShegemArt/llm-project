@@ -1,6 +1,3 @@
-
-"""Построение направленного графа знаний (FR-2)."""
-
 import networkx as nx
 
 from assistant.infra.schemas import ExtractionResult
@@ -49,7 +46,6 @@ def build_graph(results: list[ExtractionResult]) -> nx.DiGraph:
             sources=sorted(chunks),
         )
 
-    # Разрешаем конфликты в цепочках замены.
     conflicts = 0
     to_remove = set()
 

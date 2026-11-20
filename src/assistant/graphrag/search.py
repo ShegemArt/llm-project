@@ -1,5 +1,3 @@
-"""Поиск по графу знаний: local search и global map-reduce (FR-4, FR-5, FR-10)."""
-
 import json
 import re
 
@@ -44,8 +42,8 @@ def _format_edge(graph: nx.DiGraph, u: str, v: str, data: dict) -> str:
 
 
 def _replacement_paths(
-    graph: nx.DiGraph,
-    start_nodes: set[str],
+        graph: nx.DiGraph,
+        start_nodes: set[str],
 ) -> dict[str, list[str]]:
     """Возвращает однозначные цепочки REPLACED_BY для найденных деталей."""
     paths: dict[str, list[str]] = {}
@@ -86,8 +84,8 @@ def _replacement_paths(
 
 
 def _expand_part_context(
-    graph: nx.DiGraph,
-    seed_nodes: set[str],
+        graph: nx.DiGraph,
+        seed_nodes: set[str],
 ) -> tuple[set[str], set[tuple[str, str]]]:
     """Добавляет для найденных деталей тип, поставщика и все последующие замены."""
     expanded_nodes = set(seed_nodes)
@@ -114,10 +112,10 @@ def _expand_part_context(
             expanded_nodes.add(target)
 
             if (
-                relation == "REPLACED_BY"
-                and target in graph
-                and graph.nodes[target].get("type") == "Part"
-                and target not in visited_parts
+                    relation == "REPLACED_BY"
+                    and target in graph
+                    and graph.nodes[target].get("type") == "Part"
+                    and target not in visited_parts
             ):
                 pending_parts.append(target)
 
@@ -161,14 +159,12 @@ def _global_graph_statistics(graph: nx.DiGraph) -> dict:
             component_key = (line_name, component_name)
             model_key = (line_name, model_name)
             failures_by_line_component[component_key] = (
-                failures_by_line_component.get(component_key, 0) + weight
+                    failures_by_line_component.get(component_key, 0) + weight
             )
             failures_by_line_model[model_key] = (
-                failures_by_line_model.get(model_key, 0) + weight
+                    failures_by_line_model.get(model_key, 0) + weight
             )
 
-    # Учитываем только детали, которые действительно установлены в модели
-    # соответствующей линейки и имеют исходящее ребро REPLACED_BY.
     discontinued_by_line: dict[str, set[str]] = {}
     for model_node, part_nodes in model_to_parts.items():
         for line_name in model_to_lines.get(model_node, set()):
@@ -200,8 +196,8 @@ def _global_graph_statistics(graph: nx.DiGraph) -> dict:
 
 
 def _edge_sources(
-    graph: nx.DiGraph,
-    edges: set[tuple[str, str]],
+        graph: nx.DiGraph,
+        edges: set[tuple[str, str]],
 ) -> list[str]:
     """Возвращает документы, подтверждающие выбранные рёбра."""
     sources: set[str] = set()
@@ -217,9 +213,9 @@ def _edge_sources(
 
 
 def _direct_local_answer(
-    question: str,
-    kb: KnowledgeBase,
-    anchor_nodes: set[str],
+        question: str,
+        kb: KnowledgeBase,
+        anchor_nodes: set[str],
 ) -> Answer | None:
     """Отвечает напрямую по однозначным связям графа без генерации LLM."""
     graph = kb.graph
@@ -261,8 +257,8 @@ def _direct_local_answer(
         for part_node in sorted(part_nodes):
             for model_node, _, data in graph.in_edges(part_node, data=True):
                 if (
-                    data.get("type") != "HAS_PART"
-                    or graph.nodes[model_node].get("type") != "Model"
+                        data.get("type") != "HAS_PART"
+                        or graph.nodes[model_node].get("type") != "Model"
                 ):
                     continue
                 selected_edges.add((model_node, part_node))
@@ -320,7 +316,6 @@ def _direct_local_answer(
         if node in graph and graph.nodes[node].get("type") == "ErrorCode"
     }
 
-    # Запрос может быть сформулирован через название узла, без кода ошибки.
     component_nodes = {
         node
         for node in anchor_nodes
@@ -329,8 +324,8 @@ def _direct_local_answer(
     if component_nodes:
         for component_node in component_nodes:
             for error_node, _, data in graph.in_edges(
-                component_node,
-                data=True,
+                    component_node,
+                    data=True,
             ):
                 if data.get("type") == "INDICATES":
                     error_nodes.add(error_node)
@@ -386,8 +381,8 @@ def _direct_local_answer(
 
 
 def _statistics_answer(
-    question: str,
-    kb: KnowledgeBase,
+        question: str,
+        kb: KnowledgeBase,
 ) -> Answer | None:
     """Программно отвечает на вопросы о максимальной частоте отказов."""
     lowered = question.casefold()
@@ -465,7 +460,6 @@ def _statistics_answer(
             if source_name not in winning_set:
                 continue
 
-            # Учитываем только модели выбранной линейки.
             belongs = [
                 (source, line_target)
                 for _, line_target, edge_data in graph.out_edges(
@@ -473,7 +467,7 @@ def _statistics_answer(
                     data=True,
                 )
                 if edge_data.get("type") == "BELONGS_TO"
-                and graph.nodes[line_target].get("name") == line_name
+                   and graph.nodes[line_target].get("name") == line_name
             ]
             if not belongs:
                 continue
@@ -497,8 +491,8 @@ def _statistics_answer(
 
 
 def _discontinued_parts_answer(
-    question: str,
-    kb: KnowledgeBase,
+        question: str,
+        kb: KnowledgeBase,
 ) -> Answer | None:
     """Формирует ответ о снятых деталях линейки по отношениям графа."""
     if not re.search(r"снят\w*\s+с\s+производств", question, re.IGNORECASE):
@@ -554,8 +548,8 @@ def _discontinued_parts_answer(
 
             if line_node in graph:
                 for model_node, _, belongs_data in graph.in_edges(
-                    line_node,
-                    data=True,
+                        line_node,
+                        data=True,
                 ):
                     if belongs_data.get("type") != "BELONGS_TO":
                         continue
@@ -617,9 +611,9 @@ def _discontinued_parts_answer(
 
 
 def local_search(
-    question: str,
-    kb: KnowledgeBase,
-    llm: LLMClient,
+        question: str,
+        kb: KnowledgeBase,
+        llm: LLMClient,
 ) -> Answer:
     """Ищет опорные сущности и расширяет найденный контекст деталями и заменами."""
     graph = kb.graph
@@ -671,13 +665,10 @@ def local_search(
                     )
                     for path in paths:
                         for left, right in zip(
-                            path[:-1],
-                            path[1:],
-                            strict=True,
+                                path[:-1],
+                                path[1:],
+                                strict=True,
                         ):
-                            # Путь вычисляется по неориентированному графу,
-                            # но в факты добавляются только существующие
-                            # направленные отношения.
                             if graph.has_edge(left, right):
                                 selected_edges.add((left, right))
                             if graph.has_edge(right, left):
@@ -701,12 +692,9 @@ def local_search(
     for source, target in selected_edges:
         path_nodes.update((source, target))
 
-    # Для найденных деталей добавляем тип, поставщика и все связи замен.
     path_nodes, part_edges = _expand_part_context(graph, path_nodes)
     selected_edges.update(part_edges)
 
-    # Сохраняем только однозначные цепочки: при нескольких заменах
-    # не выбираем конечную деталь произвольно.
     replacement_paths = _replacement_paths(
         graph,
         {
@@ -773,18 +761,14 @@ def local_search(
 
 
 def global_search(
-    question: str,
-    kb: KnowledgeBase,
-    llm: LLMClient,
+        question: str,
+        kb: KnowledgeBase,
+        llm: LLMClient,
 ) -> Answer:
     """Объединяет сводки сообществ и точные глобальные статистики графа."""
-    # Вопросы с конкретными кодами должны опираться на факты графа,
-    # а не на пересказ сводок сообществ.
     if find_codes(question):
         return local_search(question, kb, llm)
 
-    # Список снятых с производства деталей считается программно,
-    # а не генерируется LLM из статистики отказов.
     discontinued_answer = _discontinued_parts_answer(question, kb)
     if discontinued_answer is not None:
         return discontinued_answer
@@ -819,11 +803,11 @@ def global_search(
             answer = item["answer"]
 
             if (
-                isinstance(score, int)
-                and not isinstance(score, bool)
-                and 0 < score <= 10
-                and isinstance(answer, str)
-                and answer.strip()
+                    isinstance(score, int)
+                    and not isinstance(score, bool)
+                    and 0 < score <= 10
+                    and isinstance(answer, str)
+                    and answer.strip()
             ):
                 partial_answers.append({"answer": answer, "score": score})
                 sources.update(_sources(kb.graph, set(community.nodes)))

@@ -1,5 +1,3 @@
-"""Цикл агента. Требования FR-7, FR-8, FR-9 и FR-10."""
-
 import json
 import re
 from collections.abc import Callable
@@ -51,8 +49,6 @@ VALUE_CONTEXT_BARRIER_PATTERN = re.compile(
 
 SENTENCE_BREAK_PATTERN = re.compile(r"[.!?;\n]")
 
-
-
 AGENT_HISTORY_CHAR_LIMIT = 3500
 
 AGENT_SYSTEM_PROMPT = (
@@ -98,20 +94,20 @@ def _asks_stock_question(question: str) -> bool:
 
 
 def _stock_answer_if_ignored(
-    question: str,
-    response_text: str,
-    steps: list[ToolStep],
-    *,
-    search_requested: bool = False,
+        question: str,
+        response_text: str,
+        steps: list[ToolStep],
+        *,
+        search_requested: bool = False,
 ) -> str | None:
     """Формирует ответ по полученным ERP-данным, если LLM их игнорирует."""
     if not _asks_stock_question(question):
         return None
     if not search_requested and not re.search(
-        r"недостаточно\s+данных|нет\s+информац|не\s+могу\s+определить|"
-        r"невозможно\s+определить|нельзя\s+определить|не\s+указан",
-        response_text,
-        re.IGNORECASE,
+            r"недостаточно\s+данных|нет\s+информац|не\s+могу\s+определить|"
+            r"невозможно\s+определить|нельзя\s+определить|не\s+указан",
+            response_text,
+            re.IGNORECASE,
     ):
         return None
 
@@ -136,10 +132,10 @@ def _stock_answer_if_ignored(
         if requested_part is not None and part_id != requested_part:
             continue
         if (
-            not isinstance(part_id, str)
-            or isinstance(quantity, bool)
-            or not isinstance(quantity, int)
-            or not isinstance(warehouse, str)
+                not isinstance(part_id, str)
+                or isinstance(quantity, bool)
+                or not isinstance(quantity, int)
+                or not isinstance(warehouse, str)
         ):
             continue
         stock_result = result
@@ -166,11 +162,11 @@ def _stock_answer_if_ignored(
                 step.result
                 for step in reversed(steps)
                 if step.tool == "get_price"
-                and step.error is None
-                and isinstance(step.result, dict)
-                and isinstance(step.result.get("price_rub"), int | float)
-                and not isinstance(step.result.get("price_rub"), bool)
-                and step.result.get("part_id", stock_part) == stock_part
+                   and step.error is None
+                   and isinstance(step.result, dict)
+                   and isinstance(step.result.get("price_rub"), int | float)
+                   and not isinstance(step.result.get("price_rub"), bool)
+                   and step.result.get("part_id", stock_part) == stock_part
             ),
             None,
         )
@@ -180,14 +176,13 @@ def _stock_answer_if_ignored(
                 for step in reversed(steps)
                 if step.tool == "get_price"
                 and (
-                    step.error
-                    or isinstance(step.result, dict) and step.result.get("error")
+                        step.error
+                        or isinstance(step.result, dict) and step.result.get("error")
                 )
             ),
             None,
         )
         if price_result is None and price_error is None:
-            # Не завершаем комбинированный запрос, пока не попробовали получить цену.
             return None
         if price_result is not None:
             price = price_result["price_rub"]
@@ -203,10 +198,9 @@ def _stock_answer_if_ignored(
     return " ".join(parts)
 
 
-
 def _available_tool_schemas(
-    question: str,
-    steps: list[ToolStep],
+        question: str,
+        steps: list[ToolStep],
 ) -> list[dict]:
     """Возвращает только инструменты, подходящие для вопроса и текущего шага."""
     lowered = question.casefold()
@@ -231,9 +225,9 @@ def _available_tool_schemas(
         for code in codes
     )
     direct_erp_lookup = (
-        len(explicit_parts) == 1
-        and not has_model_or_error
-        and (asks_stock or asks_price)
+            len(explicit_parts) == 1
+            and not has_model_or_error
+            and (asks_stock or asks_price)
     )
 
     used = {step.tool for step in steps}
@@ -259,12 +253,12 @@ def _available_tool_schemas(
             )
             warehouse = _warehouse_from_question(question)
             if part_id and warehouse and any(
-                step.tool == "check_stock"
-                and isinstance(step.args, dict)
-                and step.args.get("part_id") == part_id
-                and step.args.get("warehouse") == warehouse
-                and step.error is None
-                for step in steps
+                    step.tool == "check_stock"
+                    and isinstance(step.args, dict)
+                    and step.args.get("part_id") == part_id
+                    and step.args.get("warehouse") == warehouse
+                    and step.error is None
+                    for step in steps
             ):
                 continue
         elif name == "get_price" and not asks_price:
@@ -275,7 +269,6 @@ def _available_tool_schemas(
         available.append(schema)
 
     return available
-
 
 
 def _compact_tool_history(steps: list[ToolStep]) -> str:
@@ -317,9 +310,6 @@ def _compact_tool_history(steps: list[ToolStep]) -> str:
             errors.append(f"{step.tool}: {str(error)[:200]}")
 
         if step.tool == "search_knowledge":
-            # Факты предпочтительнее сгенерированного ответа:
-            # ответ поиска может ошибочно утверждать, что данных нет,
-            # хотя необходимые отношения присутствуют в facts.
             for fact in result.get("facts", []):
                 if not isinstance(fact, str) or fact in seen_facts:
                     continue
@@ -360,13 +350,11 @@ def _compact_tool_history(steps: list[ToolStep]) -> str:
                     f"{json.dumps(args, ensure_ascii=False)}"
                 )
 
-    # Цепочки замен важнее остальных дополнительных фактов:
-    # они необходимы для определения актуальной детали.
     priority_facts = [
         fact
         for fact in facts
         if "Цепочка замен:" in fact
-        or "Последняя деталь в однозначной цепочке" in fact
+           or "Последняя деталь в однозначной цепочке" in fact
     ]
 
     ordinary_facts = [
@@ -399,7 +387,6 @@ def _compact_tool_history(steps: list[ToolStep]) -> str:
     header = "Подтверждённые факты графа:\n"
     included_facts: list[str] = []
 
-    # Добавляем факты, пока не достигнут лимит контекста.
     current_length = len(base) + len(header)
 
     for fact in prioritized_facts[:32]:
@@ -418,8 +405,8 @@ def _compact_tool_history(steps: list[ToolStep]) -> str:
 
 
 def _build_agent_messages(
-    question: str,
-    steps: list[ToolStep],
+        question: str,
+        steps: list[ToolStep],
 ) -> list[dict]:
     """Строит новый компактный контекст для каждого обращения к LLM."""
     user_content = f"Вопрос пользователя:\n{question}"
@@ -428,8 +415,8 @@ def _build_agent_messages(
 
     if history:
         user_content += (
-            "\n\nРезультаты предыдущих вызовов инструментов:\n"
-            + history
+                "\n\nРезультаты предыдущих вызовов инструментов:\n"
+                + history
         )
 
     return [
@@ -442,7 +429,6 @@ def _build_agent_messages(
             "content": user_content,
         },
     ]
-
 
 
 def _as_dict(value: Any) -> dict:
@@ -507,14 +493,11 @@ def _extract_stock_values(text: str) -> set[str]:
         before = text[sentence_start:match.start()]
         after = text[match.end():match.end() + 45]
 
-        # Число должно следовать за складским контекстом либо непосредственно
-        # перед ним (например, «3 шт. в наличии»). Точка после «шт.» считается
-        # частью сокращения, а не границей предложения.
         recent_context = before[-80:]
         stock_contexts = list(STOCK_CONTEXT_PATTERN.finditer(recent_context))
         barriers = list(VALUE_CONTEXT_BARRIER_PATTERN.finditer(recent_context))
         stock_context_is_nearest = bool(stock_contexts) and (
-            not barriers or stock_contexts[-1].start() > barriers[-1].start()
+                not barriers or stock_contexts[-1].start() > barriers[-1].start()
         )
         has_stock_context = bool(
             stock_context_is_nearest
@@ -535,10 +518,10 @@ def _extract_stock_values(text: str) -> set[str]:
 
 
 def _tool_result_codes(
-    result: dict,
-    *,
-    tool_name: str | None = None,
-    question: str = "",
+        result: dict,
+        *,
+        tool_name: str | None = None,
+        question: str = "",
 ) -> set[str]:
     """Извлекает коды только из подтверждённых фактов и полей инструментов."""
     facts = result.get("facts")
@@ -556,8 +539,6 @@ def _tool_result_codes(
     serialized = json.dumps(trusted_fields, ensure_ascii=False, default=str)
     codes = set(find_codes(serialized))
 
-    # Для вопросов о снятых деталях global_search возвращает детерминированный
-    # результат, рассчитанный непосредственно по связям REPLACED_BY.
     asks_discontinued = bool(
         re.search(r"снят\w*\s+с\s+производств", question, re.IGNORECASE)
     )
@@ -570,24 +551,22 @@ def _tool_result_codes(
         )
     )
     if (
-        tool_name == "summarize_topic"
-        and (asks_discontinued or asks_model_failure_max)
-        and result.get("refused") is False
-        and isinstance(result.get("answer"), str)
+            tool_name == "summarize_topic"
+            and (asks_discontinued or asks_model_failure_max)
+            and result.get("refused") is False
+            and isinstance(result.get("answer"), str)
     ):
-        # Для этих двух классов global_search строит ответ напрямую по графу,
-        # не используя LLM для выбора кодов деталей или моделей.
         codes.update(find_codes(result["answer"]))
 
     return codes
 
 
 def _validate_answer(
-    answer: str,
-    *,
-    known_codes: set[str],
-    known_prices: set[str],
-    known_stocks: set[str],
+        answer: str,
+        *,
+        known_codes: set[str],
+        known_prices: set[str],
+        known_stocks: set[str],
 ) -> dict[str, list[str]]:
     """Ищет в ответе коды, цены и остатки без подтверждения."""
     unsupported_codes = sorted(set(find_codes(answer)) - known_codes)
@@ -606,8 +585,8 @@ def _has_unsupported_facts(violations: dict[str, list[str]]) -> bool:
 
 
 def _interrupted_result(
-    steps: list[ToolStep],
-    sources: set[str],
+        steps: list[ToolStep],
+        sources: set[str],
 ) -> AgentResult:
     details = []
     for step in steps:
@@ -651,7 +630,6 @@ def _interrupted_result(
     )
 
 
-
 def _warehouse_from_question(question: str) -> str | None:
     """Извлекает явно названный склад."""
     warehouses = ("Москва", "Санкт-Петербург", "Казань", "Новосибирск")
@@ -660,8 +638,8 @@ def _warehouse_from_question(question: str) -> str | None:
 
 
 def _resolve_part_from_knowledge(
-    question: str,
-    steps: list[ToolStep],
+        question: str,
+        steps: list[ToolStep],
 ) -> str | None:
     """Находит деталь по цепочке модель/ошибка -> компонент -> деталь -> замена."""
     codes = find_codes(question)
@@ -727,7 +705,7 @@ def _resolve_part_from_knowledge(
         part_id
         for part_id, components in part_components.items()
         if target_components.intersection(components)
-        and (not models or part_id in model_parts)
+           and (not models or part_id in model_parts)
     }
     if len(candidates) != 1:
         return None
@@ -747,27 +725,27 @@ def _resolve_part_from_knowledge(
 
 
 def _latest_stock_result(
-    steps: list[ToolStep],
-    part_id: str,
-    warehouse: str,
+        steps: list[ToolStep],
+        part_id: str,
+        warehouse: str,
 ) -> dict | None:
     for step in reversed(steps):
         if (
-            step.tool == "check_stock"
-            and isinstance(step.args, dict)
-            and step.args.get("part_id") == part_id
-            and step.args.get("warehouse") == warehouse
-            and isinstance(step.result, dict)
+                step.tool == "check_stock"
+                and isinstance(step.args, dict)
+                and step.args.get("part_id") == part_id
+                and step.args.get("warehouse") == warehouse
+                and isinstance(step.result, dict)
         ):
             return step.result
     return None
 
 
 def _blocked_order_answer(
-    question: str,
-    steps: list[ToolStep],
-    part_id: str,
-    warehouse: str,
+        question: str,
+        steps: list[ToolStep],
+        part_id: str,
+        warehouse: str,
 ) -> str | None:
     """Проверяет, не снята ли деталь с производства и хватает ли остатка."""
     stock = _latest_stock_result(steps, part_id, warehouse)
@@ -786,10 +764,10 @@ def _blocked_order_answer(
 
     requested = _extract_explicit_quantity(question)
     if (
-        requested is not None
-        and isinstance(quantity, int)
-        and not isinstance(quantity, bool)
-        and quantity < requested
+            requested is not None
+            and isinstance(quantity, int)
+            and not isinstance(quantity, bool)
+            and quantity < requested
     ):
         return (
             f"Заказ не оформлен: запрошено {requested} шт. детали {part_id}, "
@@ -816,8 +794,8 @@ def _fallback_is_allowed(steps: list[ToolStep]) -> bool:
 
 
 def _fallback_tool_request(
-    question: str,
-    steps: list[ToolStep],
+        question: str,
+        steps: list[ToolStep],
 ) -> tuple[str, dict] | None:
     """Выбирает обязательный инструмент, если модель собирается ответить без него."""
     lowered = question.casefold()
@@ -838,9 +816,9 @@ def _fallback_tool_request(
     )
 
     if re.search(r"снят\w*\s+с\s+производств", lowered) or re.search(
-        r"чаще\s+всего|наиболее\s+част|больше\s+всего|"
-        r"наибольш\w*|максимальн\w*|по\s+статистик|частот\w*",
-        lowered,
+            r"чаще\s+всего|наиболее\s+част|больше\s+всего|"
+            r"наибольш\w*|максимальн\w*|по\s+статистик|частот\w*",
+            lowered,
     ):
         if not any(step.tool == "summarize_topic" for step in steps):
             return "summarize_topic", {"question": question}
@@ -858,9 +836,9 @@ def _fallback_tool_request(
                 if code_type(code) == "Model"
             ]
             if (
-                requested is not None
-                and not stock.get("error")
-                and len(models) == 1
+                    requested is not None
+                    and not stock.get("error")
+                    and len(models) == 1
             ):
                 return "create_service_order", {
                     "part_id": part_id,
@@ -881,10 +859,10 @@ def _fallback_tool_request(
                 return "check_stock", {"part_id": part_id, "warehouse": warehouse}
 
         if asks_price and not any(
-            step.tool == "get_price"
-            and isinstance(step.args, dict)
-            and step.args.get("part_id") == part_id
-            for step in steps
+                step.tool == "get_price"
+                and isinstance(step.args, dict)
+                and step.args.get("part_id") == part_id
+                for step in steps
         ):
             return "get_price", {"part_id": part_id}
 
@@ -892,27 +870,28 @@ def _fallback_tool_request(
         return None
 
     explicit_part_lookup = (
-        len(part_codes) == 1
-        and not any(code_type(code) in {"Model", "ErrorCode"} for code in codes)
-        and (asks_stock or asks_price)
+            len(part_codes) == 1
+            and not any(code_type(code) in {"Model", "ErrorCode"} for code in codes)
+            and (asks_stock or asks_price)
     )
     needs_knowledge = not explicit_part_lookup and (
-        any(
-            code_type(code) in {"Model", "ErrorCode", "Procedure"}
-            for code in codes
-        )
-        or bool(
-            re.search(
-                r"ошибк\w*|регламент\w*|модел\w*|узел\w*|компонент\w*|"
-                r"детал\w*|поставщик\w*|поставля\w*|в\s+каких\s+моделях",
-                lowered,
+            any(
+                code_type(code) in {"Model", "ErrorCode", "Procedure"}
+                for code in codes
             )
+            or bool(
+        re.search(
+            r"ошибк\w*|регламент\w*|модел\w*|узел\w*|компонент\w*|"
+            r"детал\w*|поставщик\w*|поставля\w*|в\s+каких\s+моделях",
+            lowered,
         )
+    )
     )
     if needs_knowledge:
         return "search_knowledge", {"question": question}
 
     return None
+
 
 def _extract_warehouse(question: str) -> str | None:
     """Совместимое имя для извлечения склада в цикле агента."""
@@ -931,11 +910,11 @@ def _asks_for_order(question: str) -> bool:
 
 
 def _record_tool_result(
-    name: str,
-    args: dict,
-    result: dict,
-    steps: list[ToolStep],
-    sources: set[str],
+        name: str,
+        args: dict,
+        result: dict,
+        steps: list[ToolStep],
+        sources: set[str],
 ) -> None:
     """Сохраняет результат инструмента и его источники."""
     error = result.get("error")
@@ -952,13 +931,14 @@ def _record_tool_result(
         if isinstance(tool_sources, list):
             sources.update(str(source) for source in tool_sources)
 
+
 def run_agent(
-    question: str,
-    llm: LLMClient,
-    tools: dict[str, Callable[..., dict]],
-    *,
-    max_steps: int = 6,
-    confirm: bool = False,
+        question: str,
+        llm: LLMClient,
+        tools: dict[str, Callable[..., dict]],
+        *,
+        max_steps: int = 6,
+        confirm: bool = False,
 ) -> AgentResult:
     """Ведёт цикл агента с проверкой фактов и безопасным созданием заказов."""
     messages = [
@@ -1157,7 +1137,7 @@ def run_agent(
 
                 if fallback_name in {"search_knowledge", "summarize_topic"}:
                     knowledge_refused = (
-                        knowledge_refused or bool(fallback_result.get("refused"))
+                            knowledge_refused or bool(fallback_result.get("refused"))
                     )
                     if fallback_result.get("refused") or fallback_result.get("error"):
                         return AgentResult(
@@ -1175,9 +1155,9 @@ def run_agent(
                     if fallback_name in {"search_knowledge", "summarize_topic"}:
                         answer_text = str(fallback_result.get("answer", ""))
                         requires_erp = (
-                            _asks_stock_question(question)
-                            or _asks_price_question(question)
-                            or _asks_for_order(question)
+                                _asks_stock_question(question)
+                                or _asks_price_question(question)
+                                or _asks_for_order(question)
                         )
                         violations = _validate_answer(
                             answer_text,
@@ -1186,9 +1166,9 @@ def run_agent(
                             known_stocks=known_stocks,
                         )
                         if (
-                            not requires_erp
-                            and answer_text
-                            and not _has_unsupported_facts(violations)
+                                not requires_erp
+                                and answer_text
+                                and not _has_unsupported_facts(violations)
                         ):
                             return AgentResult(
                                 answer=answer_text,
@@ -1232,8 +1212,7 @@ def run_agent(
                 )
                 continue
 
-            # Не разрешаем модели самостоятельно придумывать объяснение
-            # неизвестного кода ошибки или модели, если поиск не запускался.
+            # Не разрешаем модели самостоятельно придумывать объяснение неизвестного кода ошибки или модели, если поиск не запускался.
             answer = response.content.strip()
             violations = _validate_answer(
                 answer,
@@ -1309,15 +1288,12 @@ def run_agent(
                 refused=knowledge_refused or answer_is_refusal,
             )
 
-        # Сохраняем вызовы ассистента перед добавлением ответов инструментов.
         messages.append(response.as_message())
 
         for call in response.tool_calls:
             if tool_calls_count >= max_steps:
                 return _interrupted_result(steps, sources)
 
-            # Считаем каждый запрос function calling, в том числе отклонённый
-            # проверками и повторный запрос, для которого используется кеш.
             tool_calls_count += 1
             name = call.name
             raw_args = call.arguments
@@ -1325,7 +1301,7 @@ def run_agent(
             step_args = dict(args)
 
             if name in {"search_knowledge", "summarize_topic"} and any(
-                previous.tool == name for previous in steps
+                    previous.tool == name for previous in steps
             ):
                 result = {
                     "error": (
@@ -1352,8 +1328,7 @@ def run_agent(
                 continue
 
             if name in {"search_knowledge", "summarize_topic"}:
-                # Не даём LLM потерять смысл отношения или ограничения при
-                # переформулировке. Сохраняем полный исходный вопрос.
+                # Не даём LLM потерять смысл отношения или ограничения при переформулировке. Сохраняем полный исходный вопрос.
                 args = {**args, "question": question}
                 step_args = dict(args)
 
@@ -1394,9 +1369,9 @@ def run_agent(
 
                 requested_qty = args.get("qty")
                 if (
-                    isinstance(requested_qty, bool)
-                    or not isinstance(requested_qty, int)
-                    or requested_qty != explicitly_requested_qty
+                        isinstance(requested_qty, bool)
+                        or not isinstance(requested_qty, int)
+                        or requested_qty != explicitly_requested_qty
                 ):
                     error = (
                         "Количество в заказе не совпадает с количеством, "
@@ -1492,7 +1467,6 @@ def run_agent(
             )
             messages.append(tool_message(call, result))
 
-            # Коды подтверждаются любым предыдущим результатом инструмента.
             known_codes.update(
                 _tool_result_codes(
                     result,
@@ -1513,9 +1487,9 @@ def run_agent(
                 if name in {"search_knowledge", "summarize_topic"} and not result.get("refused"):
                     answer_text = str(result.get("answer", ""))
                     requires_erp = (
-                        _asks_stock_question(question)
-                        or _asks_price_question(question)
-                        or _asks_for_order(question)
+                            _asks_stock_question(question)
+                            or _asks_price_question(question)
+                            or _asks_for_order(question)
                     )
                     violations = _validate_answer(
                         answer_text,
@@ -1524,12 +1498,10 @@ def run_agent(
                         known_stocks=known_stocks,
                     )
                     if (
-                        not requires_erp
-                        and answer_text
-                        and not _has_unsupported_facts(violations)
+                            not requires_erp
+                            and answer_text
+                            and not _has_unsupported_facts(violations)
                     ):
-                        # Инструмент уже вернул законченный ответ. Не запускаем
-                        # повторную генерацию, если ERP-цепочка не требуется.
                         return AgentResult(
                             answer=answer_text,
                             steps=steps,
@@ -1537,16 +1509,14 @@ def run_agent(
                             refused=False,
                         )
 
-                # Отказ поиска — конечный результат. Повторный поиск не добавит
-                # информации и раньше приводил к исчерпанию лимита шагов.
                 if result.get("refused") or (
-                    name == "search_knowledge"
-                    and isinstance(result.get("answer"), str)
-                    and re.search(
-                        r"в базе знаний не найдено|недостаточно данных",
-                        result["answer"],
-                        re.IGNORECASE,
-                    )
+                        name == "search_knowledge"
+                        and isinstance(result.get("answer"), str)
+                        and re.search(
+                    r"в базе знаний не найдено|недостаточно данных",
+                    result["answer"],
+                    re.IGNORECASE,
+                )
                 ):
                     refusal_text = result.get("answer") or result.get("error") or (
                         "В базе знаний не найдено достаточно информации."

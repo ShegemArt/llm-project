@@ -92,9 +92,9 @@ TOOL_SCHEMAS = [
 
 
 def build_tools(
-    kb: KnowledgeBase,
-    llm: LLMClient,
-    erp: ErpClient,
+        kb: KnowledgeBase,
+        llm: LLMClient,
+        erp: ErpClient,
 ) -> dict[str, Callable[..., dict]]:
     """Создаёт функции инструментов агента."""
 
@@ -141,10 +141,10 @@ def build_tools(
             return {"error": "ERP отклонила запрос цены."}
 
     def create_service_order(
-        part_id: str,
-        warehouse: str,
-        qty: int,
-        model: str,
+            part_id: str,
+            warehouse: str,
+            qty: int,
+            model: str,
     ) -> dict:
         if not isinstance(part_id, str) or not PART_PATTERN.fullmatch(part_id):
             return {"error": "Некорректный номер детали."}

@@ -1,4 +1,3 @@
-
 """Извлечение сущностей и связей из одного чанка (FR-1)."""
 
 import json
@@ -39,11 +38,11 @@ _EXPLICIT_REPLACEMENT_PATTERN = re.compile(
 
 
 def _validated_entity(
-    entity_type: str,
-    raw_name: str,
-    chunk_text: str,
-    codes_in_text: set[str],
-    vocab: dict[str, list[str]],
+        entity_type: str,
+        raw_name: str,
+        chunk_text: str,
+        codes_in_text: set[str],
+        vocab: dict[str, list[str]],
 ) -> Entity | None:
     """Возвращает сущность, подтверждённую текстом чанка и схемой словаря."""
     if not isinstance(entity_type, str) or not isinstance(raw_name, str):
@@ -71,9 +70,9 @@ def _validated_entity(
 
 
 def _extract_explicit_replacements(
-    chunk_text: str,
-    codes_in_text: set[str],
-    vocab: dict[str, list[str]],
+        chunk_text: str,
+        codes_in_text: set[str],
+        vocab: dict[str, list[str]],
 ) -> dict[frozenset[str], tuple[Entity, Entity]]:
     """Находит явно указанные пары старой и новой деталей.
 
@@ -115,8 +114,8 @@ def _extract_explicit_replacements(
 
 
 def _correct_replacement_directions(
-    relations: list[Relation],
-    replacements: dict[frozenset[str], tuple[Entity, Entity]],
+        relations: list[Relation],
+        replacements: dict[frozenset[str], tuple[Entity, Entity]],
 ) -> tuple[list[Relation], int]:
     """Исправляет направление уже извлечённых отношений REPLACED_BY.
 
@@ -180,8 +179,8 @@ def _correct_replacement_directions(
 
 
 def _extraction_prompt(
-    chunk_text: str,
-    vocab: dict[str, list[str]],
+        chunk_text: str,
+        vocab: dict[str, list[str]],
 ) -> str:
     """Формирует исчерпывающую инструкцию с явной семантикой каждого ребра."""
     return f"""
@@ -325,8 +324,8 @@ def extract_chunk(chunk: Chunk, llm: LLMClient) -> ExtractionResult:
             raw_relations = data.get("relations")
 
             if (
-                not isinstance(raw_entities, list)
-                or not isinstance(raw_relations, list)
+                    not isinstance(raw_entities, list)
+                    or not isinstance(raw_relations, list)
             ):
                 raise ValueError(
                     "Поля entities и relations должны быть списками."
@@ -407,9 +406,6 @@ def extract_chunk(chunk: Chunk, llm: LLMClient) -> ExtractionResult:
                 entities[subject.node_id] = subject
                 entities[obj.node_id] = obj
 
-            # Направление REPLACED_BY исправляется только для отношений,
-            # которые LLM действительно вернула.
-            # Отсутствующие отношения автоматически не создаются.
             explicit_replacements = _extract_explicit_replacements(
                 chunk.text,
                 codes_in_text,
